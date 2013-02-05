@@ -15,3 +15,53 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+require "English"
+require "pp" # for debug.
+
+store = lambda do |name, date, read_rate, comment|
+  unless comment.empty?
+    @result[name][date] =
+      {:read_rate => read_rate, :comment => comment.chomp}
+  end
+end
+
+if ARGV.include?("-h") or ARGV.include?("--help")
+  puts("Usage: #{$0} [REPORT_DIRECTORY]")
+  puts("  e.g.: #{$0} report_directory")
+  exit(true)
+elsif ARGV.size > 1
+  puts("Please specify only 1 arguments.")
+  exit(false)
+end
+
+report_directory = ARGV.first || "."
+report_files = Dir.glob(File.join(report_directory, "**", "*.txt"))
+
+@result = {}
+
+report_files.each do |report|
+  name = File.basename(report, ".txt")
+  @result[name] = {}
+
+  date = ""
+  read_rate = ""
+  comment = ""
+
+  File.read(report).each_line do |_line|
+    line = _line.chomp
+    case line
+    when /\A(\d\d\d\d-\d+-\d+):(\d+)%:(.*)\z/
+      store.call(name, date, read_rate, comment)
+      date = $1
+      read_rate = $2
+      comment = $3
+    when /\A\s+/
+      comment << $POSTMATCH << "\n"
+    end
+  end
+
+  store.call(name, date, read_rate, comment)
+end
+
+pp @result # for debug.
