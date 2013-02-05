@@ -82,4 +82,6 @@ report_files.each do |report|
   store(name, date, read_ratio, comment)
 end
 
-pp @parsed_reports # for debug.
+if $0 == __FILE__
+  CommitCommentTools::Parser.run(ARGV)
+end
