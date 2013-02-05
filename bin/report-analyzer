@@ -19,10 +19,10 @@
 require "English"
 require "pp" # for debug.
 
-def store(name, date, read_rate, comment)
+def store(name, date, read_ratio, comment)
   unless comment.empty?
     @result[name][date] =
-      {:read_rate => read_rate, :comment => comment.chomp}
+      {:read_ratio => read_ratio, :comment => comment.chomp}
   end
 end
 
@@ -45,23 +45,23 @@ report_files.each do |report|
   @result[name] = {}
 
   date = ""
-  read_rate = ""
+  read_ratio = ""
   comment = ""
 
   File.read(report).each_line do |_line|
     line = _line.chomp
     case line
     when /\A(\d\d\d\d-\d+-\d+):(\d+)%:(.*)\z/
-      store(name, date, read_rate, comment)
+      store(name, date, read_ratio, comment)
       date = $1
-      read_rate = $2
+      read_ratio = $2
       comment = $3
     when /\A\s+/
       comment << $POSTMATCH << "\n"
     end
   end
 
-  store(name, date, read_rate, comment)
+  store(name, date, read_ratio, comment)
 end
 
 pp @result # for debug.
