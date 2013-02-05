@@ -22,7 +22,7 @@ require "pp" # for debug.
 module CommitCommentTools
   class Parser
     class << self
-      def run(arguments)
+      def parser(arguments)
       end
     end
 
