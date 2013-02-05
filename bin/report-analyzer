@@ -19,6 +19,24 @@
 require "English"
 require "pp" # for debug.
 
+module CommitCommentTools
+  class Parser
+    class << self
+      def run(arguments)
+      end
+    end
+
+    def initialize
+    end
+
+    def parse_files(report_files)
+    end
+
+    def parse(name, report)
+    end
+  end
+end
+
 def store(name, date, read_ratio, comment)
   unless comment.empty?
     @parsed_reports[name][date] =
