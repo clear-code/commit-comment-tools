@@ -21,7 +21,7 @@ require "pp" # for debug.
 
 def store(name, date, read_ratio, comment)
   unless comment.empty?
-    @result[name][date] =
+    @parsed_reports[name][date] =
       {:read_ratio => read_ratio, :comment => comment.chomp}
   end
 end
@@ -38,11 +38,11 @@ end
 report_directory = ARGV.first || "."
 report_files = Dir.glob(File.join(report_directory, "**", "*.txt"))
 
-@result = {}
+@parsed_reports = {}
 
 report_files.each do |report|
   name = File.basename(report, ".txt")
-  @result[name] = {}
+  @parsed_reports[name] = {}
 
   date = ""
   read_ratio = ""
@@ -64,4 +64,4 @@ report_files.each do |report|
   store(name, date, read_ratio, comment)
 end
 
-pp @result # for debug.
+pp @parsed_reports # for debug.
