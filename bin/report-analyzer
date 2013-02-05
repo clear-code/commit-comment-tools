@@ -19,7 +19,7 @@
 require "English"
 require "pp" # for debug.
 
-store = lambda do |name, date, read_rate, comment|
+def store(name, date, read_rate, comment)
   unless comment.empty?
     @result[name][date] =
       {:read_rate => read_rate, :comment => comment.chomp}
@@ -52,7 +52,7 @@ report_files.each do |report|
     line = _line.chomp
     case line
     when /\A(\d\d\d\d-\d+-\d+):(\d+)%:(.*)\z/
-      store.call(name, date, read_rate, comment)
+      store(name, date, read_rate, comment)
       date = $1
       read_rate = $2
       comment = $3
@@ -61,7 +61,7 @@ report_files.each do |report|
     end
   end
 
-  store.call(name, date, read_rate, comment)
+  store(name, date, read_rate, comment)
 end
 
 pp @result # for debug.
