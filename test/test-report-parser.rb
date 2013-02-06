@@ -16,9 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 require "stringio"
-require "commit-comment-tools/parser"
+require "commit-comment-tools/report-parser"
 
-class ParserTest < Test::Unit::TestCase
+class ReportParserTest < Test::Unit::TestCase
   def setup
     @parser = CommitCommentTools::ReportParser.new
   end
