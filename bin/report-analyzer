@@ -19,13 +19,6 @@
 require "English"
 require "pp" # for debug.
 
-def store(name, date, read_ratio, comment)
-  unless comment.empty?
-    @parsed_reports[name][date] =
-      {:read_ratio => read_ratio, :comment => comment.chomp}
-  end
-end
-
 if ARGV.include?("-h") or ARGV.include?("--help")
   puts("Usage: #{$0} [REPORT_DIRECTORY]")
   puts("  e.g.: #{$0} report_directory")
