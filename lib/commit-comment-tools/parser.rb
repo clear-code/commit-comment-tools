@@ -43,11 +43,14 @@ module CommitCommentTools
       read_ratio = ""
       comment = ""
 
-      report.each_line do |_line|
+      report.each_line.with_index do |_line, line_number|
         line = _line.chomp
         case line
         when /\A(\d\d\d\d-\d+-\d+):(\d+)%:(.*)\z/
-          store(name, date, read_ratio, comment)
+          unless line_number.zero?
+            store(name, date, read_ratio, comment)
+          end
+
           date = $1
           read_ratio = $2
           comment = $3
@@ -56,15 +59,16 @@ module CommitCommentTools
         end
       end
 
-      store(name, date, read_ratio, comment)
+      unless comment.empty?
+        store(name, date, read_ratio, comment)
+      end
+
       @parsed_reports
     end
 
     def store(name, date, read_ratio, comment)
-      unless comment.empty?
         @parsed_reports[name][date] =
           {:read_ratio => read_ratio, :comment => comment.chomp}
-      end
     end
   end
 end
