@@ -16,47 +16,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-require "English"
-require "pp" # for debug.
+require "pp"
+require "commit-comment-tools/parser"
+
+# XXX: For debug. This file should create gruff from parsed reports.
+# Directory of each reports is specified by ARGV.
 
 if ARGV.include?("-h") or ARGV.include?("--help")
   puts("Usage: #{$0} [REPORT_DIRECTORY]")
   puts("  e.g.: #{$0} report_directory")
-  exit(true)
-elsif ARGV.size > 1
-  puts("Please specify only 1 arguments.")
   exit(false)
+elsif ARGV.size > 1
+  puts("Please specify only 1 arugments for #{$0}.")
+  exit(true)
 end
 
-report_directory = ARGV.first || "."
-report_files = Dir.glob(File.join(report_directory, "**", "*.txt"))
-
-@parsed_reports = {}
-
-report_files.each do |report|
-  name = File.basename(report, ".txt")
-  @parsed_reports[name] = {}
-
-  date = ""
-  read_ratio = ""
-  comment = ""
-
-  File.read(report).each_line do |_line|
-    line = _line.chomp
-    case line
-    when /\A(\d\d\d\d-\d+-\d+):(\d+)%:(.*)\z/
-      store(name, date, read_ratio, comment)
-      date = $1
-      read_ratio = $2
-      comment = $3
-    when /\A\s+/
-      comment << $POSTMATCH << "\n"
-    end
-  end
-
-  store(name, date, read_ratio, comment)
-end
-
-if $0 == __FILE__
-  CommitCommentTools::Parser.run(ARGV)
-end
+arugment = ARGV.first
+pp CommitCommentTools::Parser.parse(arugment)
