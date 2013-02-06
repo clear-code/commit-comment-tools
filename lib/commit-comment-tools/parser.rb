@@ -29,9 +29,35 @@ module CommitCommentTools
     end
 
     def parse_files(report_files)
+      report_files.each do |report_file|
+        name = File.basename(report_file, ".txt")
+        File.open(report_file, "r") do |report|
+          parse_stream(name, report)
+        end
+      end
     end
 
     def parse_stream(name, report)
+      @parsed_reports[name] = {}
+      date = ""
+      read_ratio = ""
+      comment = ""
+
+      report.each_line do |_line|
+        line = _line.chomp
+        case line
+        when /\A(\d\d\d\d-\d+-\d+):(\d+)%:(.*)\z/
+          store(name, date, read_ratio, comment)
+          date = $1
+          read_ratio = $2
+          comment = $3
+        when /\A\s+/
+          comment << $POSTMATCH << "\n"
+        end
+      end
+
+      store(name, date, read_ratio, comment)
+      @parsed_reports
     end
 
     def store(name, date, read_ratio, comment)
