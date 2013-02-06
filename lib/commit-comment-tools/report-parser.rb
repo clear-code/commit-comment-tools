@@ -37,7 +37,7 @@ module CommitCommentTools
         person_name = File.basename(report_file, ".txt")
 
         daily_entries = parse_file(report_file)
-        @person_reports[person_name] = generate_person_report(daily_entries)
+        @person_reports[person_name] = generate_daily_report(daily_entries)
       end
 
       @person_reports
