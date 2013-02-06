@@ -19,7 +19,7 @@
 require "pp"
 require "commit-comment-tools/parser"
 
-# XXX: For debug. This file should create gruff from parsed reports.
+# XXX: For debug. This file should create graph from parsed reports.
 # Directory of each reports is specified by ARGV.
 
 if ARGV.include?("-h") or ARGV.include?("--help")
