@@ -18,7 +18,7 @@
 require "English"
 
 module CommitCommentTools
-  class Parser
+  class ReportParser
     class << self
       def parse(report_directory=nil)
         report_directory ||= "."

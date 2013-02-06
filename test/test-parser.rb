@@ -20,7 +20,7 @@ require "commit-comment-tools/parser"
 
 class ParserTest < Test::Unit::TestCase
   def setup
-    @parser = CommitCommentTools::Parser.new
+    @parser = CommitCommentTools::ReportParser.new
   end
 
   def test_oneline
