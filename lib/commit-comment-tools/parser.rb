@@ -20,8 +20,8 @@ require "English"
 module CommitCommentTools
   class Parser
     class << self
-      def parse(argument=nil)
-        report_directory = argument || "."
+      def parse(report_directory=nil)
+        report_directory ||= "."
         report_files = Dir.glob(File.join(report_directory, "**", "*.txt"))
 
         self.new.parse_files(report_files)
