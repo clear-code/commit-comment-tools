@@ -93,10 +93,5 @@ module CommitCommentTools
       end
       daily_report
     end
-
-    def store(name, date, read_ratio, comment)
-      @parsed_reports[name][date] =
-        {:read_ratio => read_ratio, :comment => comment.chomp}
-    end
   end
 end
