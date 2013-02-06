@@ -48,9 +48,8 @@ module CommitCommentTools
       read_ratio = ""
       comment = ""
 
-      report.each_line.with_index do |_line, line_number|
-        line = _line.chomp
-        case line
+      report.each_line.with_index do |line, line_number|
+        case line.chomp
         when /\A(\d\d\d\d-\d+-\d+):(\d+)%:(.*)\z/
           unless line_number.zero?
             store(name, date, read_ratio, comment)
