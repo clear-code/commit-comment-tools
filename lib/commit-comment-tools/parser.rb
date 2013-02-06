@@ -33,11 +33,11 @@ module CommitCommentTools
     def parse_stream(name, report)
     end
 
-def store(name, date, read_ratio, comment)
-  unless comment.empty?
-    @parsed_reports[name][date] =
-      {:read_ratio => read_ratio, :comment => comment.chomp}
-  end
-end
+    def store(name, date, read_ratio, comment)
+      unless comment.empty?
+        @parsed_reports[name][date] =
+          {:read_ratio => read_ratio, :comment => comment.chomp}
+      end
+    end
   end
 end
