@@ -25,6 +25,7 @@ module CommitCommentTools
     end
 
     def initialize
+      @parsed_reports = {}
     end
 
     def parse_files(report_files)
