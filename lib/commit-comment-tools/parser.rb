@@ -39,6 +39,7 @@ module CommitCommentTools
           parse_stream(name, report)
         end
       end
+      @parsed_reports
     end
 
     def parse_stream(name, report)
