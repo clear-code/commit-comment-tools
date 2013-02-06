@@ -24,35 +24,42 @@ module CommitCommentTools
         report_directory ||= "."
         report_files = Dir.glob(File.join(report_directory, "**", "*.txt"))
 
-        self.new.parse_files(report_files)
+        self.new.parse(report_files)
       end
     end
 
     def initialize
-      @parsed_reports = {}
+      @person_reports = {}
     end
 
-    def parse_files(report_files)
+    def parse(report_files)
       report_files.each do |report_file|
-        name = File.basename(report_file, ".txt")
-        File.open(report_file, "r") do |report|
-          parse_stream(name, report)
-        end
+        person_name = File.basename(report_file, ".txt")
+
+        daily_entries = parse_file(report_file)
+        @person_reports[person_name] = generate_person_report(daily_entries)
       end
-      @parsed_reports
+
+      @person_reports
     end
 
-    def parse_stream(name, report)
-      @parsed_reports[name] = {}
+    def parse_file(report_file)
+      File.open(report_file, "r") do |report_io|
+        parse_stream(report_io)
+      end
+    end
+
+    def parse_stream(report_io)
+      entries = []
       date = ""
       read_ratio = ""
       comment = ""
 
-      report.each_line.with_index do |line, line_number|
+      report_io.each_line.with_index do |line, line_number|
         case line.chomp
         when /\A(\d\d\d\d-\d+-\d+):(\d+)%:(.*)\z/
           unless line_number.zero?
-            store(name, date, read_ratio, comment)
+            entries << entry(date, read_ratio, comment)
           end
 
           date = $1
@@ -64,10 +71,27 @@ module CommitCommentTools
       end
 
       unless comment.empty?
-        store(name, date, read_ratio, comment)
+        entries << entry(date, read_ratio, comment)
       end
+      entries
+    end
 
-      @parsed_reports
+    def entry(date, read_ratio, comment)
+      {
+        :date       => date,
+        :read_ratio => read_ratio,
+        :comment    => comment.chomp
+      }
+    end
+
+    def generate_daily_report(entries)
+      daily_report = {}
+
+      entries.each do |entry|
+        date = entry.delete(:date)
+        daily_report[date] = entry
+      end
+      daily_report
     end
 
     def store(name, date, read_ratio, comment)

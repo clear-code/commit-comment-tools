@@ -24,53 +24,65 @@ class ReportParserTest < Test::Unit::TestCase
   end
 
   def test_oneline
-    report = StringIO.new(<<-REPORT)
+    report_io = StringIO.new(<<-REPORT)
 2013-1-30:40%:特になし
 2013-2-1:80%:typoが多かった
 REPORT
 
-    actual_parsed_report = @parser.parse_stream("yamada", report)
-    expected_parsed_report = {
-      "yamada" => {
-        "2013-1-30" => {:read_ratio => "40", :comment => "特になし"},
-        "2013-2-1" => {:read_ratio => "80", :comment => "typoが多かった"},
-      }
-    }
-    assert_equal(expected_parsed_report, actual_parsed_report)
+    actual_entries = @parser.parse_stream(report_io)
+    expected_entries = [
+      {:date => "2013-1-30", :read_ratio => "40", :comment => "特になし"},
+      {:date => "2013-2-1",  :read_ratio => "80", :comment => "typoが多かった"},
+    ]
+    assert_equal(expected_entries, actual_entries)
   end
 
   def test_continues_lines
-    report = StringIO.new(<<-REPORT)
+    report_io = StringIO.new(<<-REPORT)
 2013-2-1:80%:typoが多かった
 2013-2-2:50%:
   PHPのコードを久しぶりに書いた
   データ駆動を使ってテストがどんどん書き直されていた
 REPORT
 
-    actual_parsed_report = @parser.parse_stream("yamada", report)
-    expected_continues_comment = "PHPのコードを久しぶりに書いた\n" +
-                                   "データ駆動を使ってテストがどんどん書き直されていた"
-    expected_parsed_report = {
-      "yamada" => {
-        "2013-2-1" => {:read_ratio => "80", :comment => "typoが多かった"},
-        "2013-2-2" => {
-          :read_ratio => "50",
-          :comment => expected_continues_comment
-        },
-      }
-    }
-    assert_equal(expected_parsed_report, actual_parsed_report)
+    actual_entries = @parser.parse_stream(report_io)
+    continues_comment = "PHPのコードを久しぶりに書いた\n" +
+                          "データ駆動を使ってテストがどんどん書き直されていた"
+    expected_entries = [
+      {:date => "2013-2-1", :read_ratio => "80", :comment => "typoが多かった"},
+      {:date => "2013-2-2", :read_ratio => "50", :comment => continues_comment},
+    ]
+    assert_equal(expected_entries, actual_entries)
   end
 
   def test_zero_padding_date
-    report = StringIO.new("2013-01-30:40%:特になし")
+    report_io = StringIO.new("2013-01-30:40%:特になし")
 
-    actual_parsed_report = @parser.parse_stream("yamada", report)
-    expected_parsed_report = {
-      "yamada" => {
-        "2013-01-30" => {:read_ratio => "40", :comment => "特になし"},
+    actual_entries = @parser.parse_stream(report_io)
+    expected_entries = [
+      {:date => "2013-01-30", :read_ratio => "40", :comment => "特になし"},
+    ]
+    assert_equal(expected_entries, actual_entries)
+  end
+
+  def test_generate_daily_report
+    entries = [
+      {:date => "2013-1-30", :read_ratio => "40", :comment => "特になし"},
+      {:date => "2013-2-1",  :read_ratio => "80", :comment => "typoが多かった"},
+    ]
+
+    actual_daily_report = @parser.generate_daily_report(entries)
+    expected_daily_report = {
+      "2013-1-30" => {
+        :read_ratio => "40",
+        :comment    => "特になし"
+      },
+      "2013-2-1" => {
+        :read_ratio => "80",
+        :comment    => "typoが多かった"
       }
     }
-    assert_equal(expected_parsed_report, actual_parsed_report)
+
+    assert_equal(expected_daily_report, actual_daily_report)
   end
 end
