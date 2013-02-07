@@ -24,7 +24,7 @@ module CommitCommentTools
         report_directory ||= "."
         report_files = Dir.glob(File.join(report_directory, "**", "*.txt"))
 
-        self.new.parse(report_files)
+        new.parse(report_files)
       end
     end
 
