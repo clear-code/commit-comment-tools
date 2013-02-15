@@ -24,9 +24,6 @@ module CommitCommentTools
         report_directory ||= "."
         report_unexpanded_path = File.join(report_directory, "**", "*.txt")
         report_file_paths = Dir.glob(report_unexpanded_path)
-        report_file_paths = report_file_paths.reject do |path|
-          File.basename(path, ".txt") == "README"
-        end
 
         new.parse(report_file_paths)
       end
@@ -39,7 +36,7 @@ module CommitCommentTools
     def parse(report_files)
       report_files.each do |report_file|
         person_name = File.basename(report_file, ".txt")
-
+        next if person_name == "README"
         daily_entries = parse_file(report_file)
         @person_reports[person_name] = generate_daily_report(daily_entries)
       end
