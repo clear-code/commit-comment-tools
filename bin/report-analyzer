@@ -17,10 +17,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 require "pp"
-require "commit-comment-tools/parser"
+require "commit-comment-tools/report-parser"
+require "commit-comment-tools/report-normalizer"
 
 # XXX: For debug. This file should create graph from parsed reports.
-# Directory of each reports is specified by ARGV.
 
 if ARGV.include?("-h") or ARGV.include?("--help")
   puts("Usage: #{$0} [REPORT_DIRECTORY]")
@@ -32,4 +32,5 @@ elsif ARGV.size > 1
 end
 
 arugment = ARGV.first
-pp CommitCommentTools::Parser.parse(arugment)
+parsed_report = CommitCommentTools::ReportParser.parse(arugment)
+pp CommitCommentTools::ReportNormlizer.normalize(parsed_reports)
