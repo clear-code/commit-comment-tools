@@ -31,6 +31,6 @@ elsif ARGV.size > 1
   exit(true)
 end
 
-arugment = ARGV.first
-parsed_reports = CommitCommentTools::ReportParser.parse(arugment)
+report_directory = ARGV.first
+parsed_reports = CommitCommentTools::ReportParser.parse(report_directory)
 pp CommitCommentTools::ReportNormlizer.normalize(parsed_reports)
