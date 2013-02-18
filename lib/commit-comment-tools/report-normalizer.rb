@@ -19,5 +19,40 @@ require "date"
 
 module CommitCommentTools
   class ReportNormlizer
+    class << self
+      def normalize(parsed_reports)
+        new.normalize(parsed_reports)
+      end
+    end
+
+    def initialize
+      @person_reports = {}
+    end
+
+    def normalize(parsed_reports)
+      parsed_reports.each do |person, daily_report|
+        normalize_daily_report(person, daily_report)
+      end
+      @person_reports
+    end
+
+    def normalize_daily_report(person, daily_report)
+      @person_reports[person] = {}
+
+      daily_report.each do |date, report|
+        normalized_date = normalize_date(date)
+        @person_reports[person][normalized_date] = normalize_report(report)
+      end
+      @person_reports
+    end
+
+    def normalize_date(date)
+      Date.parse(date).strftime("%Y-%m-%d")
+    end
+
+    def normalize_report(report)
+      report[:read_ratio] = report[:read_ratio].to_i
+      report
+    end
   end
 end
