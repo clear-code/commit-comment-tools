@@ -23,6 +23,8 @@ require "commit-comment-tools/report-normalizer"
 
 # XXX: For debug. This file should create graph from parsed reports.
 
+format = "csv"
+
 parser = OptionParser.new
 
 parser.banner = <<-BANNER
@@ -33,6 +35,10 @@ BANNER
 parser.on("-h", "--help", "Print this message and quit.") do
   $stderr.puts parser.help
   exit 0
+end
+
+parser.on("-f=[FORMAT]", "--format=[FORMAT]", "Output format [csv]") do |v|
+  format = v
 end
 
 begin
