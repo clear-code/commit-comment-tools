@@ -40,6 +40,7 @@ end
 available_formats = ["csv"]
 parser.on("-f=FORMAT", "--format=FORMAT", available_formats,
           "Output format",
+          "available formats: [#{available_formats.join(', ')}]",
           "[#{format}]") do |_format|
   format = _format
 end
