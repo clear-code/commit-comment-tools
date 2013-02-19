@@ -23,8 +23,6 @@ require "commit-comment-tools/report-normalizer"
 require "commit-comment-tools/generator"
 require "commit-comment-tools/generator/csv"
 
-# XXX: For debug. This file should create graph from parsed reports.
-
 format = "csv"
 
 parser = OptionParser.new
