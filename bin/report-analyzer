@@ -34,7 +34,7 @@ BANNER
 
 parser.on("-h", "--help", "Print this message and quit.") do
   $stderr.puts parser.help
-  exit 0
+  exit(true)
 end
 
 parser.on("-f=[FORMAT]", "--format=[FORMAT]", "Output format [csv]") do |v|
@@ -46,13 +46,13 @@ begin
 rescue OptionParser::ParseError => error
   $stderr.puts error.message
   $stderr.puts parser.help
-  exit 1
+  exit(false)
 end
 
 unless ARGV.size == 1
   $stderr.puts("Please specify only 1 arugments for #{$0}.")
   $stderr.puts parser.help
-  exit 1
+  exit(false)
 end
 
 report_directory = ARGV.first
