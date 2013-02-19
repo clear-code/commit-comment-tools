@@ -37,7 +37,10 @@ parser.on("-h", "--help", "Print this message and quit.") do
   exit(true)
 end
 
-parser.on("-f=FORMAT", "--format=FORMAT", "Output format [csv]") do |_format|
+available_formats = ["csv"]
+parser.on("-f=FORMAT", "--format=FORMAT", available_formats,
+          "Output format",
+          "[#{format}]") do |_format|
   format = _format
 end
 
