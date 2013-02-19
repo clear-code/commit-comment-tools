@@ -33,7 +33,7 @@ Usage: #{$0} [REPORT_DIRECTORY]
 BANNER
 
 parser.on("-h", "--help", "Print this message and quit.") do
-  $stderr.puts parser.help
+  $stderr.puts(parser.help)
   exit(true)
 end
 
@@ -44,14 +44,14 @@ end
 begin
   parser.parse!(ARGV)
 rescue OptionParser::ParseError => error
-  $stderr.puts error.message
-  $stderr.puts parser.help
+  $stderr.puts(error.message)
+  $stderr.puts(parser.help)
   exit(false)
 end
 
 unless ARGV.size == 1
   $stderr.puts("Please specify only 1 arugments for #{$0}.")
-  $stderr.puts parser.help
+  $stderr.puts(parser.help)
   exit(false)
 end
 
