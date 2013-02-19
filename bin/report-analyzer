@@ -44,7 +44,8 @@ rescue OptionParser::ParseError => error
 end
 
 unless ARGV.size == 1
-  puts("Please specify only 1 arugments for #{$0}.")
+  $stderr.puts("Please specify only 1 arugments for #{$0}.")
+  $stderr.puts parser.help
   exit 1
 end
 
