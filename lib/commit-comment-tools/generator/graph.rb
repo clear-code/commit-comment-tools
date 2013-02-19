@@ -18,6 +18,8 @@
 require "gruff"
 
 module CommitCommentTools
-  class GraphGenerator
+  module Generator
+    class Graph
+    end
   end
 end
