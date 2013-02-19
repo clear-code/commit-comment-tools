@@ -20,6 +20,8 @@ require "pp"
 require "optparse"
 require "commit-comment-tools/report-parser"
 require "commit-comment-tools/report-normalizer"
+require "commit-comment-tools/generator"
+require "commit-comment-tools/generator/csv"
 
 # XXX: For debug. This file should create graph from parsed reports.
 
@@ -61,4 +63,13 @@ end
 
 report_directory = ARGV.first
 parsed_reports = CommitCommentTools::ReportParser.parse(report_directory)
-pp CommitCommentTools::ReportNormlizer.normalize(parsed_reports)
+normalized_reports = CommitCommentTools::ReportNormlizer.normalize(parsed_reports)
+
+case format
+when "csv"
+  generator = CommitCommentTools::Generator::CSV.new(normalized_reports)
+else
+  raise "Must not happen! format=<#{format}>"
+end
+
+generator.run
