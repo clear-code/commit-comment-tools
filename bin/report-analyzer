@@ -25,9 +25,13 @@ require "commit-comment-tools/report-normalizer"
 
 parser = OptionParser.new
 
+parser.banner = <<-BANNER
+Usage: #{$0} [REPORT_DIRECTORY]
+ e.g.: #{$0} report_directory
+BANNER
+
 parser.on("-h", "--help", "Print this message and quit.") do
-  puts("Usage: #{$0} [REPORT_DIRECTORY]")
-  puts("  e.g.: #{$0} report_directory")
+  $stderr.puts parser.help
   exit 0
 end
 
