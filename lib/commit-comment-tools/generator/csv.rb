@@ -43,14 +43,13 @@ module CommitCommentTools
 
       private
       def daily_report2csv(members, daily_report)
-        csv_string = ::CSV.generate do |csv|
+        ::CSV.generate do |csv|
           csv << ["DATE", *members]
           daily_report.sort_by {|date, _| date}.each do |date, record|
             row_values = daily_record2row(record, members)
             csv << [date, *row_values]
           end
         end
-        csv_string
       end
 
       def daily_record2row(record, members)
