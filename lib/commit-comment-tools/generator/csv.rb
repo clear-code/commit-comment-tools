@@ -18,7 +18,7 @@ module CommitCommentTools
           end
         end
         sorted_members = members.sort
-        daily_report2csv(sorted_members, daily_report)
+        csv_string = daily_report2csv(sorted_members, daily_report)
         # TODO write to file
         puts csv_string
       end
