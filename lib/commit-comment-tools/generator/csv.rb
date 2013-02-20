@@ -21,15 +21,15 @@ require "csv"
 module CommitCommentTools
   module Generator
     class CSV
-      def initialize(normalized_reports, options={})
-        @normalized_reports = normalized_reports
+      def initialize(reports, options={})
+        @reports = reports
         @options = options
       end
 
       def generate
         members = []
         daily_report = Hash.new {|h, k| h[k] = {}}
-        @normalized_reports.each do |name, diary|
+        @reports.each do |name, diary|
           members << name
           diary.each do |date, report|
             daily_report[date][name] = report[:read_ratio]
