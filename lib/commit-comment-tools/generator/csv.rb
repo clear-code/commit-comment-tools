@@ -23,6 +23,7 @@ module CommitCommentTools
         puts csv_string
       end
 
+      private
       def daily_report2csv(members, daily_report)
         csv_string = ::CSV.generate do |csv|
           csv << ["DATE", *members]
