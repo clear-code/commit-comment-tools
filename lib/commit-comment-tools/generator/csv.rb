@@ -60,7 +60,6 @@ module CommitCommentTools
         end
         values
       end
-
     end
   end
 end
