@@ -54,11 +54,9 @@ module CommitCommentTools
       end
 
       def daily_record2row(record, members)
-        values = []
-        members.each do |name|
-          values << (record[name] || 0)
+        members.collect do |name|
+          record[name] || 0
         end
-        values
       end
     end
   end
