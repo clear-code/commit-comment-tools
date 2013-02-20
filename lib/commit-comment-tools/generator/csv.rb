@@ -28,34 +28,34 @@ module CommitCommentTools
 
       def generate
         members = []
-        daily_report = {}
+        daily_read_ratios = {}
         @reports.each do |name, diaries|
           members << name
           diaries.each do |date, report|
-            daily_report[date] ||= {}
-            daily_report[date][name] = report[:read_ratio]
+            daily_read_ratios[date] ||= {}
+            daily_read_ratios[date][name] = report[:read_ratio]
           end
         end
         sorted_members = members.sort
-        csv_string = generate_csv(sorted_members, daily_report)
+        csv_string = generate_csv(sorted_members, daily_read_ratios)
         # TODO write to file
         puts csv_string
       end
 
       private
-      def generate_csv(members, daily_report)
+      def generate_csv(members, daily_read_ratios)
         ::CSV.generate do |csv|
           csv << ["DATE", *members]
-          daily_report.sort_by {|date, _| date}.each do |date, record|
-            row_values = daily_record2row(record, members)
+          daily_read_ratios.sort_by {|date, _| date}.each do |date, read_ratios|
+            row_values = daily_record2row(read_ratios, members)
             csv << [date, *row_values]
           end
         end
       end
 
-      def daily_record2row(record, members)
+      def daily_record2row(read_ratios, members)
         members.collect do |name|
-          record[name] || 0
+          read_ratios[name] || 0
         end
       end
     end
