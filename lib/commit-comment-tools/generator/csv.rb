@@ -28,10 +28,11 @@ module CommitCommentTools
 
       def generate
         members = []
-        daily_report = Hash.new {|h, k| h[k] = {}}
+        daily_report = {}
         @reports.each do |name, diaries|
           members << name
           diaries.each do |date, report|
+            daily_report[date] ||= {}
             daily_report[date][name] = report[:read_ratio]
           end
         end
