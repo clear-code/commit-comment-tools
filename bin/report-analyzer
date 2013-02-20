@@ -70,4 +70,4 @@ else
   raise "Must not happen! format=<#{format}>"
 end
 
-generator.run
+generator.generate

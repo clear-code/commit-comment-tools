@@ -26,7 +26,7 @@ module CommitCommentTools
         @options = options
       end
 
-      def run
+      def generate
         members = []
         daily_report = Hash.new {|h, k| h[k] = {}}
         @normalized_reports.each do |name, diary|
