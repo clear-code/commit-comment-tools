@@ -18,7 +18,6 @@
 require "date"
 
 module CommitCommentTools
-
   class Entry
     class InvalidEntryError < StandardError
     end
