@@ -85,6 +85,22 @@ module CommitCommentTools
       stats_by("%Y-%Uw")
     end
 
+    def create_commit_groups(key_format="%Y-%m-%d")
+      @target_branches.map do |branch|
+        create_commit_group(branch.name, key_format)
+      end.flatten
+    end
+
+    def create_commit_group(branch_name, key_format="%Y-%m-%d")
+      # TODO Use Grit::Commit.find_all
+      groups = @repository.commits(branch_name, nil).group_by do |commit|
+        commit.date.strftime(key_format)
+      end
+      groups.map do |key, commits|
+        CommitGroup.new(branch_name, key, commits)
+      end
+    end
+
     def group_by_key(branch_name, key="%Y-%m-%d")
       # TODO Use Grit::Commit.find_all
       groups = @repository.commits(branch_name, nil).group_by do |commit|
