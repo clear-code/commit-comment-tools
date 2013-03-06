@@ -58,9 +58,10 @@ module CommitCommentTools
     end
 
     def stats
-      stats_by_date
-      stats_by_week
-      stats_by_month
+      # TODO format data
+      pp commit_groups_by_date
+      pp commit_groups_by_week
+      pp commit_groups_by_month
     end
 
     def stats_by(key)
@@ -73,16 +74,16 @@ module CommitCommentTools
       end
     end
 
-    def stats_by_date
-      stats_by("%Y-%m-%d")
+    def commit_groups_by_date
+      create_commit_groups("%Y-%m-%d")
     end
 
-    def stats_by_week
-      stats_by("%Y-%m")
+    def commit_groups_by_week
+      create_commit_groups("%Y-%Uw")
     end
 
-    def stats_by_month
-      stats_by("%Y-%Uw")
+    def commit_groups_by_month
+      create_commit_groups("%Y-%m")
     end
 
     def create_commit_groups(key_format="%Y-%m-%d")
