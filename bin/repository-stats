@@ -14,6 +14,7 @@ end
 repository_path = nil
 branch_prefix = ""
 format = "csv"
+resolution = "date"
 
 parser.on("-r=REPOSITORY", "--repository=REPOSITORY",
           "Git repository path") do |path|
@@ -32,6 +33,14 @@ parser.on("-f=FORMAT", "--format=FORMAT", available_formats,
   format = _format
 end
 
+available_resolutions = ["date", "week", "month"]
+parser.on("-R=RESOLUTION", "--resolution=RESOLUTION", available_resolutions,
+          "Data resolution",
+          "available resolutions: [#{available_resolutions.join(', ')}]",
+          "[#{resolution}]") do |_resolution|
+  resolution = _resolution
+end
+
 begin
   parser.parse!(ARGV)
 rescue OptionParser::ParseError => error
@@ -45,5 +54,7 @@ if repository_path.nil?
   exit(false)
 end
 
-repository_stats = CommitCommentTools::RepositoryStats.new(repository_path, branch_prefix)
+repository_stats = CommitCommentTools::RepositoryStats.new(repository_path,
+                                                           branch_prefix,
+                                                           resolution.to_sym)
 repository_stats.stats
