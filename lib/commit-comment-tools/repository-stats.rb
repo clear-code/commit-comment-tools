@@ -49,19 +49,25 @@ module CommitCommentTools
       end
     end
 
-    def initialize(repository_path, branch_prefix)
+    def initialize(repository_path, branch_prefix, resolution=:date)
       @repository = Grit::Repo.new(repository_path)
       @branch_prefix = branch_prefix
       @target_branches = @repository.remotes.select do |branch|
         %r!\Aorigin/#{@branch_prefix}! =~ branch.name or %r!origin(?:/svn)?/trunk\z! =~ branch.name
       end
+      @resolution = resolution
     end
 
     def stats
       # TODO format data
-      pp commit_groups_by_date
-      pp commit_groups_by_week
-      pp commit_groups_by_month
+      case @resolution
+      when :date
+        pp commit_groups_by_date
+      when :week
+        pp commit_groups_by_week
+      when :month
+        pp commit_groups_by_month
+      end
     end
 
     def commit_groups_by_date
