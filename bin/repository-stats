@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+# -*- coding: utf-8 -*-
+
+require "optparse"
+require "commit-comment-tools/repository-stats"
+
+parser = OptionParser.new
+
+parser.on("-h", "--help", "Print this message and quit.") do
+  $stderr.puts(parser.help)
+  exit(true)
+end
+
+repository_path = nil
+branch_prefix = ""
+
+parser.on("-r=REPOSITORY", "--repository=REPOSITORY",
+          "Git repository path") do |path|
+  repository_path = path
+end
+
+parser.on("--prefix=PREFIX", "Branch prefix") do |prefix|
+  branch_prefix = prefix
+end
+
+begin
+  parser.parse!(ARGV)
+rescue OptionParser::ParseError => error
+  $stderr.puts(error.message)
+  $stderr.puts(parser.help)
+  exit(false)
+end
+
+if repository_path.nil?
+  $stderr.puts(parser.help)
+  exit(false)
+end
+
+repository_stats = CommitCommentTools::RepositoryStats.new(repository_path, branch_prefix)
+repository_stats.stats
