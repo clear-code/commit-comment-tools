@@ -24,6 +24,31 @@ end
 
 module CommitCommentTools
   class RepositoryStats
+
+    class CommitGroup
+      def initialize(branch_name, key, commits)
+        @branch_name = branch_name
+        @key = key
+        @commits = commits
+      end
+
+      def size
+        @commits.size
+      end
+
+      def diff_lines_count
+        @diff_lines_count ||= commits.inject(0) do |memo, commit|
+          memo + commit.diff_lines_count
+        end
+      end
+
+      def diff_bytesize
+        @diff_bytesize ||= commits.inject(0) do |memo, commit|
+          memo + commit.diff_bytesize
+        end
+      end
+    end
+
     def initialize(repository_path, branch_prefix)
       @repository = Grit::Repo.new(repository_path)
       @branch_prefix = branch_prefix
