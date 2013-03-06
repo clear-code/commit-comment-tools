@@ -13,6 +13,7 @@ end
 
 repository_path = nil
 branch_prefix = ""
+format = "csv"
 
 parser.on("-r=REPOSITORY", "--repository=REPOSITORY",
           "Git repository path") do |path|
@@ -21,6 +22,14 @@ end
 
 parser.on("--prefix=PREFIX", "Branch prefix") do |prefix|
   branch_prefix = prefix
+end
+
+available_formats = ["csv"]
+parser.on("-f=FORMAT", "--format=FORMAT", available_formats,
+          "Output format",
+          "available formats: [#{available_formats.join(', ')}]",
+          "[#{format}]") do |_format|
+  format = _format
 end
 
 begin
