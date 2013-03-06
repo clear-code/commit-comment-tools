@@ -64,11 +64,22 @@ module CommitCommentTools
       # TODO format data
       case @resolution
       when :date
-        pp commit_groups_by_date
+        commit_groups = commit_groups_by_date
       when :week
-        pp commit_groups_by_week
+        commit_groups = commit_groups_by_week
       when :month
-        pp commit_groups_by_month
+        commit_groups = commit_groups_by_month
+      end
+      # TODO make simple
+      commit_groups.group_by do |commit_group|
+        commit_group.branch_name
+      end.each do |branch_name, commit_groups|
+        puts branch_name
+        commit_groups.sort_by do |group|
+          group.key
+        end.each do |group|
+          puts "#{group.key},#{group.size},#{group.diff_lines_count},#{group.diff_bytesize}"
+        end
       end
     end
 
