@@ -26,6 +26,8 @@ module CommitCommentTools
   class RepositoryStats
 
     class CommitGroup
+      attr_reader :branch_name, :key, :commits
+
       def initialize(branch_name, key, commits)
         @branch_name = branch_name
         @key = key
