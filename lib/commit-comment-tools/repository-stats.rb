@@ -64,16 +64,6 @@ module CommitCommentTools
       pp commit_groups_by_month
     end
 
-    def stats_by(key)
-      @target_branches.each do |branch|
-        puts branch.name
-        # TODO format data
-        pp commit_count(branch.name, key)
-        pp commit_diff_lines(branch.name, key)
-        pp commit_diff_bytesize(branch.name, key)
-      end
-    end
-
     def commit_groups_by_date
       create_commit_groups("%Y-%m-%d")
     end
