@@ -8,7 +8,6 @@ parser = OptionParser.new
 
 parser.banner = <<-BANNER
 Usage: #{$0} [options] REPOSITORY_PATH
- e.g.: #{$0} /path/to/repository
 BANNER
 
 parser.on("-h", "--help", "Print this message and quit.") do
