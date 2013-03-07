@@ -14,7 +14,7 @@ end
 repository_path = nil
 branch_prefix = ""
 format = "csv"
-resolution = "date"
+resolution = :date
 
 parser.on("-r=REPOSITORY", "--repository=REPOSITORY",
           "Git repository path") do |path|
@@ -33,7 +33,7 @@ parser.on("-f=FORMAT", "--format=FORMAT", available_formats,
   format = _format
 end
 
-available_resolutions = ["date", "week", "month"]
+available_resolutions = [:date, :week, :month]
 parser.on("-R=RESOLUTION", "--resolution=RESOLUTION", available_resolutions,
           "Data resolution",
           "available resolutions: [#{available_resolutions.join(', ')}]",
@@ -56,5 +56,5 @@ end
 
 repository_stats = CommitCommentTools::RepositoryStats.new(repository_path,
                                                            branch_prefix,
-                                                           resolution.to_sym)
+                                                           resolution)
 repository_stats.stats
