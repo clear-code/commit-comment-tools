@@ -51,7 +51,7 @@ module CommitCommentTools
       end
     end
 
-    def initialize(repository_path, branch_prefix, resolution=:date)
+    def initialize(repository_path, branch_prefix, resolution=:day)
       @repository = Grit::Repo.new(repository_path)
       @target_branches = @repository.remotes.select do |branch|
         /\A#{Regexp.quote(branch_prefix)}/ =~ branch.name
@@ -62,7 +62,7 @@ module CommitCommentTools
     def stats
       # TODO format data
       case @resolution
-      when :date
+      when :day
         commit_groups = commit_groups_by_date
       when :week
         commit_groups = commit_groups_by_week
