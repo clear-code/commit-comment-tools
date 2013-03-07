@@ -54,7 +54,7 @@ module CommitCommentTools
     def initialize(repository_path, branch_prefix, resolution=:day)
       @repository = Grit::Repo.new(repository_path)
       @target_branches = @repository.remotes.select do |branch|
-        /\A#{Regexp.quote(branch_prefix)}/ =~ branch.name
+        branch.name.start_with?(branch_prefix)
       end
       @resolution = resolution
     end
