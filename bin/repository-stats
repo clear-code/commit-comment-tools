@@ -6,20 +6,19 @@ require "commit-comment-tools/repository-stats"
 
 parser = OptionParser.new
 
+parser.banner = <<-BANNER
+Usage: #{$0} [options] REPOSITORY_PATH
+ e.g.: #{$0} /path/to/repository
+BANNER
+
 parser.on("-h", "--help", "Print this message and quit.") do
   $stderr.puts(parser.help)
   exit(true)
 end
 
-repository_path = nil
 branch_prefix = ""
 format = :csv
 resolution = :date
-
-parser.on("-r=REPOSITORY", "--repository=REPOSITORY",
-          "Git repository path") do |path|
-  repository_path = path
-end
 
 parser.on("--prefix=PREFIX", "Branch prefix") do |prefix|
   branch_prefix = prefix
@@ -49,10 +48,12 @@ rescue OptionParser::ParseError => error
   exit(false)
 end
 
-if repository_path.nil?
+unless ARGV.size == 1
   $stderr.puts(parser.help)
   exit(false)
 end
+
+repository_path = ARGV.shift
 
 repository_stats = CommitCommentTools::RepositoryStats.new(repository_path,
                                                            branch_prefix,
