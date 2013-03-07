@@ -19,6 +19,7 @@ end
 branch_prefix = ""
 format = :csv
 resolution = :day
+since = nil
 
 parser.on("--prefix=PREFIX", "Branch prefix") do |prefix|
   branch_prefix = prefix
@@ -38,6 +39,11 @@ parser.on("-R=RESOLUTION", "--resolution=RESOLUTION", available_resolutions,
           "available resolutions: [#{available_resolutions.join(', ')}]",
           "[#{resolution}]") do |_resolution|
   resolution = _resolution
+end
+
+# TODO Implement to process this option
+parser.on("--since=SINCE", "Same as git log --since") do |_since|
+  since = _since
 end
 
 begin
