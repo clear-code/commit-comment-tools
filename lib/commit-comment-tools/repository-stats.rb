@@ -53,9 +53,8 @@ module CommitCommentTools
 
     def initialize(repository_path, branch_prefix, resolution=:date)
       @repository = Grit::Repo.new(repository_path)
-      @branch_prefix = branch_prefix
       @target_branches = @repository.remotes.select do |branch|
-        %r!\Aorigin/#{@branch_prefix}! =~ branch.name or %r!origin(?:/svn)?/trunk\z! =~ branch.name
+        /\A#{Regexp.quote(branch_prefix)}/ =~ branch.name
       end
       @resolution = resolution
     end
