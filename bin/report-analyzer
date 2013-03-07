@@ -23,7 +23,7 @@ require "commit-comment-tools/report-normalizer"
 require "commit-comment-tools/generator"
 require "commit-comment-tools/generator/csv"
 
-format = "csv"
+format = :csv
 
 parser = OptionParser.new
 
@@ -37,7 +37,7 @@ parser.on("-h", "--help", "Print this message and quit.") do
   exit(true)
 end
 
-available_formats = ["csv"]
+available_formats = [:csv]
 parser.on("-f=FORMAT", "--format=FORMAT", available_formats,
           "Output format",
           "available formats: [#{available_formats.join(', ')}]",
@@ -64,7 +64,7 @@ parsed_reports = CommitCommentTools::ReportParser.parse(report_directory)
 normalized_reports = CommitCommentTools::ReportNormlizer.normalize(parsed_reports)
 
 case format
-when "csv"
+when :csv
   generator = CommitCommentTools::Generator::CSV.new(normalized_reports)
 else
   raise "Must not happen! format=<#{format}>"
