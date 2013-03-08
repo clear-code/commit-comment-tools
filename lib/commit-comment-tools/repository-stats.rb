@@ -51,10 +51,10 @@ module CommitCommentTools
       end
     end
 
-    def initialize(repository_path, branch_prefix, resolution=:day)
+    def initialize(repository_path, branch_name, resolution=:day)
       @repository = Grit::Repo.new(repository_path)
       @target_branches = @repository.remotes.select do |branch|
-        branch.name.start_with?(branch_prefix)
+        branch_name === branch.name
       end
       @resolution = resolution
     end

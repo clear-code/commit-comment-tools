@@ -15,13 +15,18 @@ parser.on("-h", "--help", "Print this message and quit.") do
   exit(true)
 end
 
-branch_prefix = ""
+branch_name = nil
 format = :csv
 resolution = :day
 since = nil
 
-parser.on("--prefix=PREFIX", "Branch prefix") do |prefix|
-  branch_prefix = prefix
+parser.on("-b=NAME", "--branch=NAME", String, "Branch name") do |name|
+  pattern = name.slice(%r!\A/(.*)/\z!, 1)
+  if pattern
+    branch_name = Regexp.new(pattern)
+  else
+    branch_name = name
+  end
 end
 
 available_formats = [:csv]
@@ -61,6 +66,6 @@ end
 repository_path = ARGV.shift
 
 repository_stats = CommitCommentTools::RepositoryStats.new(repository_path,
-                                                           branch_prefix,
+                                                           branch_name,
                                                            resolution)
 repository_stats.stats
