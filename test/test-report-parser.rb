@@ -86,7 +86,7 @@ REPORT
     assert_equal(expected_daily_report, actual_daily_report)
   end
 
-  def test_missing_semicolon
+  def test_missing_colon
     report_io = StringIO.new(<<-REPORT)
 2013-1-30:40%
 2013-2-1:80%
