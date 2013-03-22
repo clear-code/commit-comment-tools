@@ -58,7 +58,7 @@ module CommitCommentTools
 
       report_io.each_line.with_index do |line, line_number|
         case line.chomp
-        when /\A(\d\d\d\d-\d+-\d+):(\d+)%:(.*)\z/
+        when /\A(\d\d\d\d-\d+-\d+):(\d+)%:?(.*)\z/
           unless line_number.zero?
             entries << entry(date, read_ratio, comment)
           end
