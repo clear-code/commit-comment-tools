@@ -36,7 +36,7 @@ module CommitCommentTools
     def parse(report_files)
       report_files.each do |report_file|
         person_name = File.basename(report_file, ".txt")
-        next if person_name == "README"
+        next unless person_name == person_name.downcase
         daily_entries = parse_file(report_file)
         @person_reports[person_name] = generate_daily_report(daily_entries)
       end
