@@ -46,7 +46,7 @@ Gem::Specification.new do |spec|
   spec.summary = summary
   spec.license = "GPLv3 or later"
   spec.files = ["README.md"]
-  spec.files = ["Rakefile", "Gemfile", "commit-comment-tools.gemspec"]
+  spec.files += ["Rakefile", "Gemfile", "commit-comment-tools.gemspec"]
   spec.files += [".yardopts"]
   spec.files += Dir.glob("lib/**/*.rb")
   spec.files += Dir.glob("doc/text/*")
