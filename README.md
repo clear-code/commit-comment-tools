@@ -16,7 +16,7 @@ TODO
 
 ## License
 
-GPL v3 or later.
+GPL 3.0 or later. See doc/text/gpl-3.0.txt for details.
 
 ## Authors
 
