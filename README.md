@@ -21,6 +21,6 @@ GPL 3.0 or later. See doc/text/gpl-3.0.txt for details.
 ## Authors
 
 * Kenji Okimoto: `<okimoto@clear-code.com>`
-* Kohei Sutou: `<kou@clear-code.com>`
+* Kouhei Sutou: `<kou@clear-code.com>`
 * Haruka Yoshihara: `<yoshihara@clear-code.com>`
 
