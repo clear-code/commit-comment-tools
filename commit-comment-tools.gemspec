@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 clean_white_space = lambda do |entry|
-  entry.gsub(/(\A\n+|\n+\z)/, '') + "\n"
+  entry.gsub(/(\A\n+|\n+\z)/, "") + "\n"
 end
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), "lib"))
