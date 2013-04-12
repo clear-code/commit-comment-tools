@@ -41,5 +41,14 @@ module CommitCommentTools
         raise(InvalidEntryError, error_message)
       end
     end
+
+    def to_hash
+      {
+        :name       => @name,
+        :date       => @date,
+        :read_ratio => @read_ratio,
+        :comment    => @comment,
+      }
+    end
   end
 end
