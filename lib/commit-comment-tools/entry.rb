@@ -30,7 +30,7 @@ module CommitCommentTools
       @read_ratio = nil
       @comment = nil
 
-      if /\A(\d\d\d\d-\d+-\d+):(\d+)%:(.*)\z/m =~ entry_chunk
+      if /\A(\d\d\d\d-\d+-\d+):(\d+)%:?(.*)\z/m =~ entry_chunk
         @date = Date.parse($1).strftime("%Y-%m-%d")
         @read_ratio = $2.to_i
         @comment = $3
