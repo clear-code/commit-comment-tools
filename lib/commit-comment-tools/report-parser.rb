@@ -30,51 +30,42 @@ module CommitCommentTools
     end
 
     def initialize
+      @entries = []
       @person_reports = {}
     end
 
     def parse(report_files)
       report_files.each do |report_file|
-        person_name = File.basename(report_file, ".txt")
-        next unless person_name == person_name.downcase
-        daily_entries = parse_file(report_file)
-        @person_reports[person_name] = generate_daily_report(daily_entries)
+        parse_file(report_file)
       end
-
-      @person_reports
+      @entries
     end
 
     def parse_file(report_file)
+      name = File.basename(report_file, ".txt")
+      return unless name == name.downcase
       File.open(report_file, "r") do |report_io|
-        parse_stream(report_io)
+        parse_stream(name, report_io)
       end
     end
 
-    def parse_stream(report_io)
-      entries = []
-      date = ""
-      read_ratio = ""
-      comment = ""
-
-      report_io.each_line.with_index do |line, line_number|
-        case line.chomp
-        when /\A(\d\d\d\d-\d+-\d+):(\d+)%:?(.*)\z/
-          unless line_number.zero?
-            entries << entry(date, read_ratio, comment)
-          end
-
-          date = $1
-          read_ratio = $2
-          comment = $3
-        when /\A\s+/
-          comment << $POSTMATCH << "\n"
+    def parse_stream(name, report_io)
+      chunks = []
+      chunk = ""
+      report_io.each_line do |line|
+        case line
+        when /\A\s/
+          chunk << line.lstrip
+        else
+          chunks << chunk unless chunk.empty?
+          chunk = line.chomp
         end
       end
-
-      unless comment.empty?
-        entries << entry(date, read_ratio, comment)
+      chunks << chunk unless chunk.empty?
+      chunks.each do |chunk|
+        @entries << Entry.new(name, chunk.chomp)
       end
-      entries
+      @entries
     end
 
     def entry(date, read_ratio, comment)
