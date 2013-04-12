@@ -32,15 +32,7 @@ module CommitCommentTools
         csv_string = ::CSV.generate do |csv|
           csv << ["DATE", *members]
           date_list.each do |date|
-            entries = @entries.select do |entry|
-              entry.date == date
-            end
-            target_entries = []
-            members.each do |name|
-              target_entries << entries.detect do |entry|
-                entry.name == name
-              end
-            end
+            target_entries = extract_target_entries(date, members)
             daily_read_ratios = target_entries.collect do |entry|
               entry ? entry.read_ratio : 0
             end
@@ -50,6 +42,20 @@ module CommitCommentTools
 
         # TODO write to file
         puts csv_string
+      end
+
+      private
+      def extract_target_entries(date, members)
+        entries = @entries.select do |entry|
+          entry.date == date
+        end
+        target_entries = []
+        members.each do |name|
+          target_entries << entries.detect do |entry|
+            entry.name == name
+          end
+        end
+        target_entries
       end
     end
   end
