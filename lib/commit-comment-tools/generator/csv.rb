@@ -21,23 +21,33 @@ require "csv"
 module CommitCommentTools
   module Generator
     class CSV
-      def initialize(reports, options={})
-        @reports = reports
+      def initialize(entries, options={})
+        @entries = entries
         @options = options
       end
 
       def generate
-        members = []
-        daily_read_ratios = {}
-        @reports.each do |name, diaries|
-          members << name
-          diaries.each do |date, report|
-            daily_read_ratios[date] ||= {}
-            daily_read_ratios[date][name] = report[:read_ratio]
+        date_list = @entries.collect(&:date).sort.uniq
+        members = @entries.collect(&:name).sort.uniq
+        csv_string = ::CSV.generate do |csv|
+          csv << ["DATE", *members]
+          date_list.each do |date|
+            entries = @entries.select do |entry|
+              entry.date == date
+            end
+            target_entries = []
+            members.each do |name|
+              target_entries << entries.detect do |entry|
+                entry.name == name
+              end
+            end
+            daily_read_ratios = target_entries.collect do |entry|
+              entry ? entry.read_ratio : 0
+            end
+            csv << [date, *daily_read_ratios]
           end
         end
-        sorted_members = members.sort
-        csv_string = generate_csv(sorted_members, daily_read_ratios)
+
         # TODO write to file
         puts csv_string
       end

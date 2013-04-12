@@ -19,7 +19,7 @@
 require "pp"
 require "optparse"
 require "commit-comment-tools/report-parser"
-require "commit-comment-tools/report-normalizer"
+require "commit-comment-tools/entry"
 require "commit-comment-tools/generator"
 require "commit-comment-tools/generator/csv"
 
@@ -60,12 +60,11 @@ unless ARGV.size == 1
 end
 
 report_directory = ARGV.first
-parsed_reports = CommitCommentTools::ReportParser.parse(report_directory)
-normalized_reports = CommitCommentTools::ReportNormlizer.normalize(parsed_reports)
+entries = CommitCommentTools::ReportParser.parse(report_directory)
 
 case format
 when :csv
-  generator = CommitCommentTools::Generator::CSV.new(normalized_reports)
+  generator = CommitCommentTools::Generator::CSV.new(entries)
 else
   raise "Must not happen! format=<#{format}>"
 end
