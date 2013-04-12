@@ -67,23 +67,5 @@ module CommitCommentTools
       end
       @entries
     end
-
-    def entry(date, read_ratio, comment)
-      {
-        :date       => date,
-        :read_ratio => read_ratio,
-        :comment    => comment.chomp
-      }
-    end
-
-    def generate_daily_report(entries)
-      daily_report = {}
-
-      entries.each do |entry|
-        date = entry.delete(:date)
-        daily_report[date] = entry
-      end
-      daily_report
-    end
   end
 end

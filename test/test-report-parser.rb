@@ -65,27 +65,6 @@ REPORT
     assert_equal(expected_entries, actual_entries.collect(&:to_hash))
   end
 
-  def test_generate_daily_report
-    entries = [
-      {:date => "2013-1-30", :read_ratio => "40", :comment => "特になし"},
-      {:date => "2013-2-1",  :read_ratio => "80", :comment => "typoが多かった"},
-    ]
-
-    actual_daily_report = @parser.generate_daily_report(entries)
-    expected_daily_report = {
-      "2013-1-30" => {
-        :read_ratio => "40",
-        :comment    => "特になし"
-      },
-      "2013-2-1" => {
-        :read_ratio => "80",
-        :comment    => "typoが多かった"
-      }
-    }
-
-    assert_equal(expected_daily_report, actual_daily_report)
-  end
-
   def test_missing_colon
     report_io = StringIO.new(<<-REPORT)
 2013-1-30:40%
