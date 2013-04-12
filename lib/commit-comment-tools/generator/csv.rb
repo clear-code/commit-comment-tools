@@ -51,23 +51,6 @@ module CommitCommentTools
         # TODO write to file
         puts csv_string
       end
-
-      private
-      def generate_csv(members, daily_read_ratios)
-        ::CSV.generate do |csv|
-          csv << ["DATE", *members]
-          daily_read_ratios.sort_by {|date, _| date}.each do |date, read_ratios|
-            row_values = daily_record2row(read_ratios, members)
-            csv << [date, *row_values]
-          end
-        end
-      end
-
-      def daily_record2row(read_ratios, members)
-        members.collect do |name|
-          read_ratios[name] || 0
-        end
-      end
     end
   end
 end
