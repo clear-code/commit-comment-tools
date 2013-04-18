@@ -1,6 +1,8 @@
 require "grit"
 require "active_record"
 
+require "commit-comment-tools/commit"
+
 Grit::Git.git_timeout  = 30 # timeout in secs
 Grit::Git.git_max_size = 2 * 1024 * 1024 # size in bytes (2MB)
 
@@ -21,9 +23,6 @@ module Grit
 end
 
 module CommitCommentTools
-  class Commit < ActiveRecord::Base
-  end
-
   class RepositoryLoader
     def initialize(repository_path, base_branch_name, branch_name="")
       create_table
