@@ -58,6 +58,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency("activerecord")
   spec.add_runtime_dependency("sqlite3")
   spec.add_runtime_dependency("grit")
+  spec.add_runtime_dependency("gnuplot")
   spec.add_development_dependency("test-unit")
   spec.add_development_dependency("test-unit-notify")
   spec.add_development_dependency("bundler")
