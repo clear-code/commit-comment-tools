@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 require "date"
+require "csv"
 
 require "commit-comment-tools/commit"
 
@@ -25,52 +26,81 @@ module CommitCommentTools
       @db_path = db_path
       @max_lines = max_lines
       @step = step
+      @ranges = create_ranges(max_lines, step)
       @terms = terms.collect do |term|
         term.split(":").collect do |date|
           Date.parse(date)
         end
       end
+      check_terms(@terms)
       @format = format
     end
 
     def analyze
       ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: @db_path)
-      commit_groups = @terms.collect do |first, last|
-        Commit.where(committed_date: first..last)
-      end
-      n_commits_by_lines = commit_groups.collect do |commit_group|
-        plot(commit_group, commit_group.count)
+
+      commit_groups = @terms.collect do |first, last; range|
+        range = first..last
+        Commit.where(committed_date: range)
       end
 
-      first, *rest = *n_commits_by_lines
-      rest_values = rest.collect{|ratio_map| ratio_map.collect{|_, ratio| ratio }}
-
-      # TODO output to file
-      first.zip(*rest_values) do |(label, first_ratio), *rest_ratios|
-        puts([label, first_ratio, *rest_ratios].join(","))
+      csv_string = CSV.generate do |csv|
+        csv << ["TERM", *create_header(@terms)]
+        @ranges.each do |range; ratio_list|
+          ratio_list = calculate_ratios(commit_groups, {diff_lines_count: range})
+          csv << [range.to_s, *ratio_list]
+        end
+        over_max_ratio_list = calculate_ratios(commit_groups, ["diff_lines_count > ?",  @max_lines])
+        csv << ["over #{@max_lines}", *over_max_ratio_list]
+        csv << ["TOTAL", *commit_groups.collect(&:count)]
       end
+
+      puts csv_string
     end
 
     private
 
-    def plot(commits, total)
-      distribution_map = Hash.new(0)
-      commits.each do |commit|
-        mod = commit.diff_lines_count % @step
-        if commit.diff_lines_count <= @max_lines
-          base = commit.diff_lines_count - mod
-          distribution_map["#{"%03d" % [base]}..#{"%03d" % [base + @step]}"] += 1
-        else
-          distribution_map["over #{@max_lines}"] += 1
-        end
+    def create_header(terms)
+      terms.collect do |first, last|
+        (first..last).to_s
       end
-
-      ratio_distribution_map = {}
-      distribution_map.each do |label, n_commits|
-        ratio_distribution_map[label] = ((n_commits / total.to_f).round(2) * 100).to_i
-      end
-      ratio_distribution_map.sort_by{|label, _| label }
     end
 
+    def create_ranges(max_lines, step)
+      0.step(max_lines - step, step).collect do |n|
+        if n == 0
+          n..(n + step)
+        else
+          (n + 1)..(n + step)
+        end
+      end
+    end
+
+    def check_terms(terms)
+      unless terms.all?{|term| term.size == 2 }
+        $stderr.puts "Invalid terms: #{terms_string(terms)}"
+        exit(false)
+      end
+      unless terms.flatten.all?{|date| date.is_a?(Date) }
+        $stderr.puts "Invalid terms: #{terms_string(terms)}"
+        exit(false)
+      end
+    end
+
+    def terms_string(terms)
+      terms.collect{|term| term.join(':') }.join(',')
+    end
+
+    def calculate_ratios(commit_groups, condition)
+      commit_groups.collect do |commit_group; n_commits, n_total_commits|
+        n_commits = commit_group.where(condition).count
+        n_total_commits = commit_group.count
+        calculate_ratio(n_commits, n_total_commits)
+      end
+    end
+
+    def calculate_ratio(n_commits, n_total_commits)
+      ((n_commits / n_total_commits.to_f) * 100).round(2)
+    end
   end
 end
