@@ -1,0 +1,97 @@
+#!/usr/bin/env ruby
+# -*- coding: utf-8 -*-
+#
+# Copyright (C) 2013  Kenji Okimoto <okimoto@clear-code.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+require "active_record"
+require "optparse"
+require "pathname"
+
+require "commit-comment-tools/commits-analyzer"
+
+def main
+  db_path = nil
+  step = 50
+  max_lines = 300
+  format = :csv
+  terms = []
+  parser = OptionParser.new
+  parser.banner = <<-BANNER
+Usage: #{$0} [options]
+  e.g: #{$0} -d ./commits.db
+  BANNER
+
+  parser.on("-h", "--help", "Print this message and quit.") do
+    $stderr.puts(parser.help)
+    exit(true)
+  end
+
+  parser.on("-d=PATH", "--database=PATH", String, "Database path.") do |path|
+    db_path = Pathname(path).expand_path.to_s
+  end
+
+  parser.on("-m=MAX_LINES", "--max=MAX_LINES", Integer,
+            "Max lines of diff. [#{max_lines}]") do |_max_lines|
+    max_lines = _max_lines
+  end
+
+  parser.on("-s=STEP", "--step=STEP", Integer, "Step. [#{step}]") do |_step|
+    step = _step
+  end
+
+  parser.on("-t", "--terms=TERM1,TERM2,TERM3,", Array,
+            "Analyze commits in these terms.") do |_terms|
+    terms = _terms
+  end
+
+  available_formats = [:csv, :png]
+  parser.on("-f=FORMAT", "--format=FORMAT", available_formats,
+            "Output format",
+            "available formats: [#{available_formats.join(', ')}]",
+            "[#{format}]") do |_format|
+    format = _format
+  end
+
+  begin
+    parser.parse!(ARGV)
+  rescue OptionParser::ParseError => error
+    $stderr.puts(error.message)
+    $stderr.puts(parser.help)
+    exit(false)
+  end
+
+  if db_path.nil?
+    $stderr.puts("Must specify --database option")
+    $stderr.puts(parser.help)
+    exit(false)
+  end
+
+  if terms.empty?
+    $stderr.puts("Must specify --terms option")
+    $stderr.puts(parser.help)
+    exit(false)
+  end
+
+  analyze_commits(db_path, max_lines, step, terms, format)
+end
+
+def analyze_commits(db_path, max_lines, step, terms, format)
+  analyzer = CommitCommentTools::CommitsAnalyzer.new(db_path, max_lines, step, terms, format)
+  analyzer.analyze
+end
+
+main
+
