@@ -61,6 +61,12 @@ Usage: #{$0} [options]
     exit(false)
   end
 
+  if db_path.nil?
+    $stderr.puts("Must specify --database option")
+    $stderr.puts(parser.help)
+    exit(false)
+  end
+
   load_commits(db_path, repository_path, branch_name)
 end
 
