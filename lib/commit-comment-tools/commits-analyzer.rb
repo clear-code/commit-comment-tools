@@ -59,6 +59,20 @@ module CommitCommentTools
     end
 
     def average
+      ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: @db_path)
+
+      csv_string = CSV.generate do |csv|
+        csv << ["Average", "コミット数"]
+        @terms.collect do |first, last; range|
+          range = first..last
+          commit_group = Commit.where(committed_date: range)
+          n_commits = commit_group.count
+          n_days = commit_group.all.group_by{|commit| commit.committed_date.strftime("%Y%m%d") }.size
+          csv << [range.to_s, calculate_average(n_commits, n_days)]
+        end
+      end
+
+      puts csv_string
     end
 
     private
@@ -104,6 +118,10 @@ module CommitCommentTools
 
     def calculate_ratio(n_commits, n_total_commits)
       ((n_commits / n_total_commits.to_f) * 100).round(2)
+    end
+
+    def calculate_average(n_commits, n_days)
+      (n_commits / n_days.to_f).round(2)
     end
   end
 end
