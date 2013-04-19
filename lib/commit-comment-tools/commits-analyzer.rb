@@ -50,7 +50,7 @@ module CommitCommentTools
           ratio_list = calculate_ratios(commit_groups, {diff_lines_count: range})
           csv << [range.to_s, *ratio_list]
         end
-        over_max_ratio_list = calculate_ratios(commit_groups, ["diff_lines_count > ?",  @max_lines])
+        over_max_ratio_list = calculate_ratios(commit_groups, ["diff_lines_count > ?", @max_lines])
         csv << ["over #{@max_lines}", *over_max_ratio_list]
         csv << ["TOTAL", *commit_groups.collect(&:count)]
       end
