@@ -36,9 +36,9 @@ Usage: #{$0} REPORT_DIRECTORY
 
       available_formats = [:csv, :png]
       @parser.on("-f=FORMAT", "--format=FORMAT", available_formats,
-                "Output format",
-                "available formats: [#{available_formats.join(', ')}]",
-                "[#{@format}]") do |format|
+                 "Output format",
+                 "available formats: [#{available_formats.join(', ')}]",
+                 "[#{@format}]") do |format|
         @format = format
       end
     end
