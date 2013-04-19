@@ -104,7 +104,12 @@ end
 
 def analyze_commits(db_path, max_lines, step, terms, format, mode, output_filename)
   analyzer = CommitCommentTools::CommitsAnalyzer.new(db_path, max_lines, step, terms, format)
-  analyzer.pareto
+  case mode
+  when :pareto
+    analyzer.pareto
+  when :average
+    analyzer.average
+  end
 end
 
 main
