@@ -28,6 +28,7 @@ def main
   max_lines = 300
   format = :csv
   mode = :pareto
+  output_filename = nil
   terms = []
   parser = OptionParser.new
   parser.banner = <<-BANNER
@@ -73,6 +74,11 @@ Usage: #{$0} [options]
             "[#{mode}]") do |_mode|
     mode = _mode
   end
+
+  parser.on("-o=PATH", "--output-filename=PATH", String, "Output filename.") do |path|
+    output_filename = Pathname(path).expand_path.to_s
+  end
+
   begin
     parser.parse!(ARGV)
   rescue OptionParser::ParseError => error
