@@ -99,10 +99,10 @@ Usage: #{$0} [options]
     exit(false)
   end
 
-  analyze_commits(db_path, max_lines, step, terms, format)
+  analyze_commits(db_path, max_lines, step, terms, format, mode, output_filename)
 end
 
-def analyze_commits(db_path, max_lines, step, terms, format)
+def analyze_commits(db_path, max_lines, step, terms, format, mode, output_filename)
   analyzer = CommitCommentTools::CommitsAnalyzer.new(db_path, max_lines, step, terms, format)
   analyzer.pareto
 end
