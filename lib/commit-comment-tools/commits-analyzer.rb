@@ -44,7 +44,7 @@ module CommitCommentTools
         Commit.where(committed_date: range)
       end
 
-      csv_string = CSV.generate do |csv|
+      CSV.generate do |csv|
         csv << ["TERM", *create_header(@terms)]
         @ranges.each do |range; ratio_list|
           ratio_list = calculate_ratios(commit_groups, {diff_lines_count: range})
@@ -54,14 +54,12 @@ module CommitCommentTools
         csv << ["over #{@max_lines}", *over_max_ratio_list]
         csv << ["TOTAL", *commit_groups.collect(&:count)]
       end
-
-      puts csv_string
     end
 
     def average
       ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: @db_path)
 
-      csv_string = CSV.generate do |csv|
+      CSV.generate do |csv|
         csv << ["Average", "コミット数"]
         @terms.collect do |first, last; range|
           range = first..last
@@ -71,8 +69,6 @@ module CommitCommentTools
           csv << [range.to_s, calculate_average(n_commits, n_days)]
         end
       end
-
-      puts csv_string
     end
 
     private

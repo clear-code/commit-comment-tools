@@ -106,9 +106,16 @@ def analyze_commits(db_path, max_lines, step, terms, format, mode, output_filena
   analyzer = CommitCommentTools::CommitsAnalyzer.new(db_path, max_lines, step, terms, format)
   case mode
   when :pareto
-    analyzer.pareto
+    csv_string = analyzer.pareto
   when :average
-    analyzer.average
+    csv_string = analyzer.average
+  end
+  if output_filename
+    File.open(output_filename, "w+") do |file|
+      file.puts csv_string
+    end
+  else
+    puts csv_string
   end
 end
 
