@@ -27,6 +27,7 @@ def main
   step = 50
   max_lines = 300
   format = :csv
+  mode = :pareto
   terms = []
   parser = OptionParser.new
   parser.banner = <<-BANNER
@@ -65,6 +66,13 @@ Usage: #{$0} [options]
     format = _format
   end
 
+  available_modes = [:pareto, :average]
+  parser.on("-m=MODE", "--mode=MODE", available_modes,
+            "Output mode",
+            "available modes: [#{available_modes.join(', ')}]",
+            "[#{mode}]") do |_mode|
+    mode = _mode
+  end
   begin
     parser.parse!(ARGV)
   rescue OptionParser::ParseError => error
