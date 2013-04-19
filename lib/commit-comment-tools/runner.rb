@@ -58,7 +58,7 @@ Global Opions:
 
       @subcommands = {
         "load-commits"    => CommitCommentTools::Subcommands::LoadCommitsCommand.new,
-        "analyze-commits" => nil,
+        "analyze-commits" => CommitCommentTools::Subcommands::AnalyzeCommitsCommand.new,
         "analyze-reports" => CommitCommentTools::Subcommands::AnalyzeReportsCommand.new,
         "fetch-mails"     => nil,
         "count-mails"     => nil,
