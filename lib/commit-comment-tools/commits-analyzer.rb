@@ -58,6 +58,9 @@ module CommitCommentTools
       puts csv_string
     end
 
+    def average
+    end
+
     private
 
     def create_header(terms)
