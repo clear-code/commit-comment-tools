@@ -27,8 +27,8 @@ require "commit-comment-tools/generator/csv"
 module CommitCommentTools::Subcommands
   class AnalyzeReportsCommand < CommitCommentTools::Subcommand
     def initialize
+      super
       @format = :csv
-      @parser = OptionParser.new
       @parser.banner = <<-BANNER
 Usage: #{$0} REPORT_DIRECTORY
  e.g.: #{$0} daily-report
@@ -40,11 +40,6 @@ Usage: #{$0} REPORT_DIRECTORY
                 "available formats: [#{available_formats.join(', ')}]",
                 "[#{@format}]") do |format|
         @format = format
-      end
-
-      @parser.on("-h", "--help", "Print this message and quit.") do
-        $stderr.puts(@parser.help)
-        exit(true)
       end
     end
 

@@ -21,6 +21,15 @@ require "optparse"
 
 module CommitCommentTools
   class Subcommand
+    def initialize
+      @parser = OptionParser.new
+
+      @parser.on_tail("-h", "--help", "Print this message and quit.") do
+        $stderr.puts(@parser.help)
+        exit(true)
+      end
+    end
+
     def parse(argv)
       @parser.parse!(argv)
     end
