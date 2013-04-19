@@ -39,6 +39,7 @@ module CommitCommentTools
       else
         raise "must not happen! mode=<#{@mode}>"
       end
+      puts "done."
     end
 
     def download_via_imap
