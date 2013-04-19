@@ -39,14 +39,14 @@ module CommitCommentTools
     def pareto
       ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: @db_path)
 
-      commit_groups = @terms.collect do |first, last; range|
+      commit_groups = @terms.collect do |first, last|
         range = first..last
         Commit.where(committed_date: range)
       end
 
       CSV.generate do |csv|
         csv << ["TERM", *create_header(@terms)]
-        @ranges.each do |range; ratio_list|
+        @ranges.each do |range|
           ratio_list = calculate_ratios(commit_groups, {diff_lines_count: range})
           csv << [range.to_s, *ratio_list]
         end
@@ -61,7 +61,7 @@ module CommitCommentTools
 
       CSV.generate do |csv|
         csv << ["Average", "コミット数"]
-        @terms.collect do |first, last; range|
+        @terms.collect do |first, last|
           range = first..last
           commit_group = Commit.where(committed_date: range)
           n_commits = commit_group.count
@@ -105,7 +105,7 @@ module CommitCommentTools
     end
 
     def calculate_ratios(commit_groups, condition)
-      commit_groups.collect do |commit_group; n_commits, n_total_commits|
+      commit_groups.collect do |commit_group|
         n_commits = commit_group.where(condition).count
         n_total_commits = commit_group.count
         calculate_ratio(n_commits, n_total_commits)
