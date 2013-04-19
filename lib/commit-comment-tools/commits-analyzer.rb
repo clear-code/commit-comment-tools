@@ -36,7 +36,7 @@ module CommitCommentTools
       @format = format
     end
 
-    def analyze
+    def pareto
       ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: @db_path)
 
       commit_groups = @terms.collect do |first, last; range|

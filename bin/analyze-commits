@@ -90,7 +90,7 @@ end
 
 def analyze_commits(db_path, max_lines, step, terms, format)
   analyzer = CommitCommentTools::CommitsAnalyzer.new(db_path, max_lines, step, terms, format)
-  analyzer.analyze
+  analyzer.pareto
 end
 
 main
