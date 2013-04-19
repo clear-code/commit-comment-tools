@@ -20,38 +20,29 @@ require "csv"
 
 module CommitCommentTools
   class MailCounter
-    def initialize(terms, reply_from_patterns, options)
+    def initialize(directory, terms, reply_from_patterns)
+      @directory = directory
       @terms = terms.collect do |term|
         term.split(":").collect do |date|
           Date.parse(date)
         end
       end
       @reply_from_patterns = reply_from_patterns
-
-      @imap = Net::IMAP.new(options[:server], options[:port], options[:ssl])
-      @imap.login(options[:username], options[:password])
-      @imap.select(options[:mailbox])
     end
 
     def count
-      search_threads = []
-      ids_map = {}
+      count_map = {}
       @terms.each do |first, last|
         range = first..last
-        search_threads << Thread.start(first, last) do |_first, _last|
-          ids_map[range.to_s] = @imap.search(filter(_first, _last))
-        end
-      end
-      search_threads.each(&:join)
-      count_map = {}
-      ids_map.each do |label, ids|
+        label = range.to_s
+        maildir = File.join(@directory, range.to_s)
         count_map[label] = Hash.new(0)
-        @imap.fetch(ids, ["RFC822.HEADER"]).each do |mail|
-          header = mail.attr["RFC822.HEADER"]
-          if header.match(/^In-Reply-To/im)
+        Dir.glob("#{maildir}/*.eml") do |entry|
+          mail = File.read(entry).force_encoding("binary")
+          if mail.match(/^In-Reply-To:/i)
             count_map[label]["n_reply_mails"] += 1
             @reply_from_patterns.each do |group_name, pattern|
-              count_map[label][group_name] += 1 if header.match(pattern)
+              count_map[label][group_name] += 1 if mail.match(pattern)
             end
           else
             count_map[label]["n_original_mails"] += 1
@@ -69,12 +60,6 @@ module CommitCommentTools
           csv << [label, n_original_mails, *n_comments_list, n_reply_mails]
         end
       end
-    end
-
-    private
-
-    def filter(first, last)
-      ["SINCE", first.strftime("%d-%b-%Y"), "BEFORE", last.strftime("%d-%b-%Y")]
     end
   end
 end

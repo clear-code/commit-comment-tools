@@ -19,23 +19,14 @@
 require "commit-comment-tools/mail-counter"
 
 def main
-  options = {
-    server: nil,
-    port: 143,
-    username: nil,
-    password: nil,
-    ssl: false,
-    mailbox: "INBOX"
-  }
+  directory = nil
   output_filename = nil
   terms = []
   reply_from_patterns = {}
   parser = OptionParser.new
   parser.banner = <<-BANNER
 Usage: #{$0} [options]
-  e.g: #{$0} -s imap.example.com -p 143 -u username -p password --no-ssl \\
-             -t 2013-02-01:2013-02-28,2013-03-01:2013-03-31 \\
-             -m commit \\
+  e.g: #{$0} -d ./mails -o ./reports/commit-mail.csv \\
              --reply-from-patterns @example.com:/^From:.*?@example\\.com/,@example.net:/^From:.*@example\\.net/
   BANNER
 
@@ -44,28 +35,12 @@ Usage: #{$0} [options]
     exit(true)
   end
 
-  parser.on("-s=ADDRESS", "--server=ADDRESS", String, "IMAP server address.") do |server|
-    options[:server] = server
+  parser.on("-d", "--directory=DIR", String, "Load mails from DIR.") do |dir|
+    directory = dir
   end
 
-  parser.on("-P=PORT", "--port=PORT", Integer, "Port number. [143]") do |port|
-    options[:port] = port
-  end
-
-  parser.on("-u=USERNAME", "--username=USERNAME", "User name for IMAP login.") do |username|
-    options[:username] = username
-  end
-
-  parser.on("-p=PASSWORD", "--password=PASSWORD", "Password for IMAP login.") do |password|
-    options[:password] = password
-  end
-
-  parser.on("--[no-]ssl", "Use SSL [false]") do |ssl|
-    options[:ssl] = ssl
-  end
-
-  parser.on("-m=MAILBOX", "--mailbox=MAILBOX", String, "IMAP mailbox name. [INBOX]") do |mailbox|
-    options[:mailbox] = mailbox
+  parser.on("-o", "--output-filename=PATH", String, "Store CSV data to PATH.") do |path|
+    output_filename = path
   end
 
   parser.on("-t", "--terms=TERM1,TERM2,TERM3,", Array,
@@ -96,12 +71,18 @@ Usage: #{$0} [options]
     exit(false)
   end
 
-  count_mails(terms, reply_from_patterns, options)
+  count_mails(directory, output_filename, terms, reply_from_patterns)
 end
 
-def count_mails(terms, reply_from_patterns, options)
-  mail_counter = CommitCommentTools::MailCounter.new(terms, reply_from_patterns, options)
-  puts mail_counter.count
+def count_mails(directory, output_filename, terms, reply_from_patterns)
+  mail_counter = CommitCommentTools::MailCounter.new(directory, terms, reply_from_patterns)
+  if output_filename
+    File.open(output_filename, "wb+") do |file|
+      file.puts mail_counter.count
+    end
+  else
+    puts mail_counter.count
+  end
 end
 
 main
