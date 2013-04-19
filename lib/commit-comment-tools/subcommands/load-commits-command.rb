@@ -38,7 +38,7 @@ Usage: #{$0} [options]
       end
 
       @parser.on("-b=NAME", "--branch=NAME", String,
-                "Load commits in matching branch NAME (patterns may be used).") do |name|
+                 "Load commits in matching branch NAME (patterns may be used).") do |name|
         pattern = name.slice(%r!\A/(.*)/\z!, 1)
         if pattern
           @branch_name = Regexp.new(pattern)
