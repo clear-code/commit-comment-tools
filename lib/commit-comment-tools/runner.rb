@@ -60,7 +60,7 @@ Global Opions:
         "load-commits"    => CommitCommentTools::Subcommands::LoadCommitsCommand.new,
         "analyze-commits" => CommitCommentTools::Subcommands::AnalyzeCommitsCommand.new,
         "analyze-reports" => CommitCommentTools::Subcommands::AnalyzeReportsCommand.new,
-        "fetch-mails"     => nil,
+        "fetch-mails"     => CommitCommentTools::Subcommands::FetchMailsCommand.new,
         "count-mails"     => nil,
       }
     end
