@@ -18,7 +18,7 @@
 require "net/imap"
 
 module CommitCommentTools
-  class MailDownloader
+  class MailFetcher
     def initialize(mode, terms, outputdir, options)
       @mode = mode
       @terms = terms.collect do |term|
@@ -30,19 +30,19 @@ module CommitCommentTools
       @options = options
     end
 
-    def download
+    def fetch
       case @mode
       when :imap
-        download_via_imap
+        fetch_via_imap
       when :pop
-        download_via_pop
+        fetch_via_pop
       else
         raise "must not happen! mode=<#{@mode}>"
       end
       puts "done."
     end
 
-    def download_via_imap
+    def fetch_via_imap
       imap = Net::IMAP.new(@options[:server], @options[:port], @options[:ssl])
       imap.login(@options[:username], @options[:password])
       imap.select(@options[:mailbox])
@@ -71,7 +71,7 @@ module CommitCommentTools
       imap.disconnect
     end
 
-    def download_via_pop
+    def fetch_via_pop
       raise "Not implemented!"
     end
 

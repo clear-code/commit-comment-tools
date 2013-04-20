@@ -18,7 +18,7 @@
 require "optparse"
 require "pathname"
 
-require "commit-comment-tools/mail-downloader"
+require "commit-comment-tools/mail-fetcher"
 
 module CommitCommentTools::Subcommands
   class FetchMailsCommand < CommitCommentTools::Subcommand
@@ -83,8 +83,8 @@ Usage: #{$0} [options]
     end
 
     def exec(global_options, argv)
-      downloader = CommitCommentTools::MailDownloader.new(@mode, @terms, @output_directory, @options)
-      downloader.download
+      fetcher = CommitCommentTools::MailFetcher.new(@mode, @terms, @output_directory, @options)
+      fetcher.fetch
     end
   end
 end
