@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 require "commit-comment-tools"
+require "commit-comment-tools/version"
 
 require "optparse"
 
@@ -28,6 +29,8 @@ module CommitCommentTools
         $stderr.puts(@parser.help)
         exit(true)
       end
+
+      @parser.version = CommitCommentTools::VERSION
     end
 
     def parse(argv)

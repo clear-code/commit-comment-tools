@@ -18,6 +18,8 @@
 require "pathname"
 require "optparse"
 
+require "commit-comment-tools/version"
+
 libdir = Pathname.new(__FILE__).realpath.dirname.parent.cleanpath
 subcommands_dir = libdir + "commit-comment-tools/subcommands"
 Dir.glob(File.join(subcommands_dir.to_s, "*.rb")) do |entry|
@@ -38,6 +40,7 @@ module CommitCommentTools
     def prepare
       @global_options = {}
       @parser = OptionParser.new
+      @parser.version = CommitCommentTools::VERSION
       @parser.banner = <<-BANNER
 Usage: #{File.basename($0)} [global options] <subcommand> [options] [args]
 
