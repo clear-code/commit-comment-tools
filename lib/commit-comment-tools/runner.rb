@@ -64,7 +64,7 @@ Global Opions:
         "analyze-commits" => CommitCommentTools::Subcommands::AnalyzeCommitsCommand.new,
         "analyze-reports" => CommitCommentTools::Subcommands::AnalyzeReportsCommand.new,
         "fetch-mails"     => CommitCommentTools::Subcommands::FetchMailsCommand.new,
-        "count-mails"     => nil,
+        "count-mails"     => CommitCommentTools::Subcommands::CountMailsCommand.new,
       }
     end
 
