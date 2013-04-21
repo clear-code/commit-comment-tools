@@ -63,7 +63,7 @@ module CommitCommentTools
           commit_group = Commit.where(committed_date: term.range)
           n_commits = commit_group.count
           n_days = commit_group.all.group_by{|commit| commit.committed_date.strftime("%Y%m%d") }.size
-          csv << [range.to_s, calculate_average(n_commits, n_days)]
+          csv << [term.label, calculate_average(n_commits, n_days)]
         end
       end
     end
