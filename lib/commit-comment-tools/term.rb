@@ -22,7 +22,14 @@ module CommitCommentTools
     class << self
       def parse(term_string)
         first, last, n_business_days = term_string.split(":")
-        new(Date.parse(first), Date.parse(last), n_business_days.to_i)
+        first = Date.parse(first)
+        last = Date.parse(last)
+        if n_business_days.nil?
+          n_business_days = (first..last).to_a.size
+        else
+          n_business_days = n_business_days.to_i
+        end
+        new(first, last, n_business_days)
       end
     end
 
@@ -32,11 +39,7 @@ module CommitCommentTools
       @first = first
       @last = last
       @range = first..last
-      if n_business_days == 0
-        @n_business_days = @range.to_a.size
-      else
-        @n_business_days = n_business_days
-      end
+      @n_business_days = n_business_days
     end
 
     def label
