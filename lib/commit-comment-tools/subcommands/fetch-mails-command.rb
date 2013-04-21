@@ -74,7 +74,9 @@ Usage: #{$0} [options]
 
       @parser.on("-t", "--terms=TERM1,TERM2,TERM3,", Array,
                  "Analyze commits in these terms.") do |terms|
-        @terms = terms
+        @terms = terms.collect do |term_string|
+          Term.parse(term_string)
+        end
       end
 
       @parser.on("-o=DIR", "--output-directory=DIR", String, "Store mails in DIR") do |directory|

@@ -18,34 +18,30 @@
 require "net/imap"
 require "csv"
 
+require "commit-comment-tools/term"
+
 module CommitCommentTools
   class MailCounter
     def initialize(directory, terms, reply_from_patterns)
       @directory = directory
-      @terms = terms.collect do |term|
-        term.split(":").collect do |date|
-          Date.parse(date)
-        end
-      end
+      @terms = terms
       @reply_from_patterns = reply_from_patterns
     end
 
     def count
       count_map = {}
-      @terms.each do |first, last|
-        range = first..last
-        label = range.to_s
-        maildir = File.join(@directory, range.to_s)
-        count_map[label] = Hash.new(0)
+      @terms.each do |term|
+        maildir = File.join(@directory, term.label)
+        count_map[term.label] = Hash.new(0)
         Dir.glob("#{maildir}/*.eml") do |entry|
           mail = File.read(entry).force_encoding("binary")
           if mail.match(/^In-Reply-To:/i)
-            count_map[label]["n_reply_mails"] += 1
+            count_map[term.label]["n_reply_mails"] += 1
             @reply_from_patterns.each do |group_name, pattern|
-              count_map[label][group_name] += 1 if mail.match(pattern)
+              count_map[term.label][group_name] += 1 if mail.match(pattern)
             end
           else
-            count_map[label]["n_original_mails"] += 1
+            count_map[term.label]["n_original_mails"] += 1
           end
         end
       end

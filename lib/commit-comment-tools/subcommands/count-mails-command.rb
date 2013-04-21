@@ -44,7 +44,9 @@ Usage: #{$0} count-mails [options]
 
       @parser.on("-t", "--terms=TERM1,TERM2,TERM3,", Array,
                  "Analyze commits in these terms.") do |terms|
-        @terms = terms
+        @terms = terms.collect do |term_string|
+          Term.parse(term_string)
+        end
       end
 
       @parser.on("--reply-from-patterns=LABEL:PATTERN,...", Array,

@@ -19,6 +19,7 @@ require "date"
 require "csv"
 
 require "commit-comment-tools/commit"
+require "commit-comment-tools/term"
 
 module CommitCommentTools
   class CommitsAnalyzer
@@ -27,12 +28,7 @@ module CommitCommentTools
       @max_lines = max_lines
       @step = step
       @ranges = create_ranges(max_lines, step)
-      @terms = terms.collect do |term|
-        term.split(":").collect do |date|
-          Date.parse(date)
-        end
-      end
-      check_terms(@terms)
+      @terms = terms
       @format = format
     end
 
@@ -61,9 +57,8 @@ module CommitCommentTools
 
       CSV.generate do |csv|
         csv << ["Average", "コミット数"]
-        @terms.collect do |first, last|
-          range = first..last
-          commit_group = Commit.where(committed_date: range)
+        @terms.collect do |term|
+          commit_group = Commit.where(committed_date: term.range)
           n_commits = commit_group.count
           n_days = commit_group.all.group_by{|commit| commit.committed_date.strftime("%Y%m%d") }.size
           csv << [range.to_s, calculate_average(n_commits, n_days)]
@@ -74,8 +69,8 @@ module CommitCommentTools
     private
 
     def create_header(terms)
-      terms.collect do |first, last|
-        (first..last).to_s
+      terms.collect do |term|
+        term.label
       end
     end
 
@@ -87,21 +82,6 @@ module CommitCommentTools
           (n + 1)..(n + step)
         end
       end
-    end
-
-    def check_terms(terms)
-      unless terms.all?{|term| term.size == 2 }
-        $stderr.puts "Invalid terms: #{terms_string(terms)}"
-        exit(false)
-      end
-      unless terms.flatten.all?{|date| date.is_a?(Date) }
-        $stderr.puts "Invalid terms: #{terms_string(terms)}"
-        exit(false)
-      end
-    end
-
-    def terms_string(terms)
-      terms.collect{|term| term.join(':') }.join(',')
     end
 
     def calculate_ratios(commit_groups, condition)

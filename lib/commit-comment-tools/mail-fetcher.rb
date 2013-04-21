@@ -17,15 +17,13 @@
 
 require "net/imap"
 
+require "commit-comment-tools/term"
+
 module CommitCommentTools
   class MailFetcher
     def initialize(mode, terms, outputdir, options)
       @mode = mode
-      @terms = terms.collect do |term|
-        term.split(":").collect do |date|
-          Date.parse(date)
-        end
-      end
+      @terms = terms
       @outputdir = outputdir
       @options = options
     end
@@ -49,12 +47,11 @@ module CommitCommentTools
 
       threads = []
       @outputdir
-      @terms.each do |first, last|
-        range = first..last
-        dir = File.join(@outputdir, range.to_s)
+      @terms.each do |term|
+        dir = File.join(@outputdir, term.label)
         FileUtils.mkdir_p(dir)
-        threads << Thread.start(first, last) do |_first, _last|
-          ids = imap.search(filter(_first, _last))
+        threads << Thread.start(term) do |_term|
+          ids = imap.search(filter(_term.first, _term.last))
           imap.fetch(ids, ["RFC822"]).each do |mail|
             filename = "%s.eml" % Time.now.strftime("%s%N")
             Dir.chdir(dir) do
