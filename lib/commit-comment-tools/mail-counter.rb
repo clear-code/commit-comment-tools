@@ -19,9 +19,12 @@ require "net/imap"
 require "csv"
 
 require "commit-comment-tools/term"
+require "commit-comment-tools/utility"
 
 module CommitCommentTools
   class MailCounter
+    include CommitCommentTools::Utility
+
     def initialize(directory, terms, reply_from_patterns)
       @directory = directory
       @terms = terms
@@ -56,15 +59,11 @@ module CommitCommentTools
           n_reply_mails = row_map.delete("n_reply_mails")
           n_original_mails = row_map.delete("n_original_mails")
           n_comments_list = row_map.sort_by{|group_name, _| group_name }.collect(&:last)
-          n_original_mails_per_day = average(n_original_mails, term.n_business_days)
-          n_reply_mails_per_day = average(n_reply_mails, term.n_business_days)
+          n_original_mails_per_day = calculate_average(n_original_mails, term.n_business_days)
+          n_reply_mails_per_day = calculate_average(n_reply_mails, term.n_business_days)
           csv << [label, n_original_mails_per_day, *n_comments_list, n_reply_mails_per_day]
         end
       end
-    end
-
-    def average(total, n_elements)
-      (total / n_elements.to_f).round(2)
     end
   end
 end

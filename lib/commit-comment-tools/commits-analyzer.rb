@@ -20,9 +20,12 @@ require "csv"
 
 require "commit-comment-tools/commit"
 require "commit-comment-tools/term"
+require "commit-comment-tools/utility"
 
 module CommitCommentTools
   class CommitsAnalyzer
+    include CommitCommentTools::Utility
+
     def initialize(db_path, max_lines, step, terms, format)
       @db_path = db_path
       @max_lines = max_lines
@@ -90,14 +93,6 @@ module CommitCommentTools
         n_total_commits = commit_group.count
         calculate_ratio(n_commits, n_total_commits)
       end
-    end
-
-    def calculate_ratio(n_commits, n_total_commits)
-      ((n_commits / n_total_commits.to_f) * 100).round(2)
-    end
-
-    def calculate_average(n_commits, n_days)
-      (n_commits / n_days.to_f).round(2)
     end
   end
 end
