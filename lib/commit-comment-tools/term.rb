@@ -38,5 +38,9 @@ module CommitCommentTools
     def label
       @range.to_s
     end
+
+    def ==(other)
+      @first == other.first && @last == other.last && @n_business_days == other.n_business_days
+    end
   end
 end
