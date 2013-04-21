@@ -32,7 +32,11 @@ module CommitCommentTools
       @first = first
       @last = last
       @range = first..last
-      @n_business_days = n_business_days || @range.to_s.size
+      if n_business_days == 0
+        @n_business_days = @range.to_a.size
+      else
+        @n_business_days = n_business_days
+      end
     end
 
     def label
