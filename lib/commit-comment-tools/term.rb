@@ -46,6 +46,10 @@ module CommitCommentTools
       @range.to_s
     end
 
+    def include?(date)
+      @range.include?(date)
+    end
+
     def ==(other)
       @first == other.first && @last == other.last && @n_business_days == other.n_business_days
     end
