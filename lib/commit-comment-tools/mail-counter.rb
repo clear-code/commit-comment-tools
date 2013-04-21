@@ -49,13 +49,22 @@ module CommitCommentTools
       CSV.generate do |csv|
         csv << ["TERM", "average(commit)", *@reply_from_patterns.keys.sort, "average(reply)"]
         count_map.each do |label, row_map|
+          term = @terms.detect do |term|
+            term.label == label
+          end
           row_map = row_map.dup
           n_reply_mails = row_map.delete("n_reply_mails")
           n_original_mails = row_map.delete("n_original_mails")
           n_comments_list = row_map.sort_by{|group_name, _| group_name }.collect(&:last)
-          csv << [label, n_original_mails, *n_comments_list, n_reply_mails]
+          n_original_mails_per_day = average(n_original_mails, term.n_business_days)
+          n_reply_mails_per_day = average(n_reply_mails, term.n_business_days)
+          csv << [label, n_original_mails_per_day, *n_comments_list, n_reply_mails_per_day]
         end
       end
+    end
+
+    def average(total, n_elements)
+      (total / n_elements.to_f).round(2)
     end
   end
 end
