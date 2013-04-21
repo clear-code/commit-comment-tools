@@ -59,7 +59,7 @@ module CommitCommentTools
 
       ::CSV.generate do |csv|
         csv << ["Average", "コミット数"]
-        @terms.collect do |term|
+        @terms.each do |term|
           commit_group = Commit.where(committed_date: term.range)
           n_commits = commit_group.count
           n_days = commit_group.all.group_by{|commit| commit.committed_date.strftime("%Y%m%d") }.size
