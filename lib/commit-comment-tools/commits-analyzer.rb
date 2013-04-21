@@ -38,9 +38,8 @@ module CommitCommentTools
     def pareto
       ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: @db_path)
 
-      commit_groups = @terms.collect do |first, last|
-        range = first..last
-        Commit.where(committed_date: range)
+      commit_groups = @terms.collect do |term|
+        Commit.where(committed_date: term.range)
       end
 
       CSV.generate do |csv|
