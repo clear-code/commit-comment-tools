@@ -19,7 +19,7 @@ module CommitCommentTools
   class Term
     class << self
       def parse(term_string)
-        first, last, n_business_days = term_string(":")
+        first, last, n_business_days = term_string.split(":")
         new(Date.parse(first), Date.parse(last), n_business_days.to_i)
       end
     end
