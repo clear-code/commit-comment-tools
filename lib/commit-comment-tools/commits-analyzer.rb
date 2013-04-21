@@ -69,12 +69,15 @@ module CommitCommentTools
       ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: @db_path)
 
       ::CSV.generate do |csv|
-        csv << ["Average", "コミット数"]
+        csv << ["#Average", "コミット数", "lines"]
         @terms.each do |term|
           commit_group = Commit.where(committed_date: term.range)
           n_commits = commit_group.count
           n_days = commit_group.all.group_by{|commit| commit.committed_date.strftime("%Y%m%d") }.size
-          csv << [term.label, calculate_average(n_commits, n_days)]
+          n_lines = commit_group.sum(:diff_lines_count)
+          csv << [term.label,
+                  calculate_average(n_commits, n_days),
+                  calculate_average(n_lines, n_commits)]
         end
       end
     end
