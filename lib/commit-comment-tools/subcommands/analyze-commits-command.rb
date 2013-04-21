@@ -88,13 +88,13 @@ Options:
 
     def exec(global_options, argv)
       analyzer = CommitCommentTools::CommitsAnalyzer.new(@db_path, @max_lines, @step, @terms, @format)
-      case mode
+      case @mode
       when :pareto
         csv_string = analyzer.pareto
       when :average
         csv_string = analyzer.average
       end
-      if output_filename
+      if @output_filename
         File.open(output_filename, "w+") do |file|
           file.puts csv_string
         end
