@@ -23,6 +23,8 @@ require "commit-comment-tools/report-parser"
 require "commit-comment-tools/entry"
 require "commit-comment-tools/generator"
 require "commit-comment-tools/generator/csv"
+require "commit-comment-tools/generator/graph"
+require "commit-comment-tools/generator/summary"
 
 module CommitCommentTools::Subcommands
   class AnalyzeReportsCommand < CommitCommentTools::Subcommand
@@ -37,7 +39,7 @@ Usage: #{$0} REPORT_DIRECTORY
 Options:
       BANNER
 
-      available_formats = [:csv, :png]
+      available_formats = [:csv, :png, :summary]
       @parser.on("-f=FORMAT", "--format=FORMAT", available_formats,
                  "Output format",
                  "available formats: [#{available_formats.join(', ')}]",
@@ -47,6 +49,21 @@ Options:
 
       @parser.on("-o", "--output-filename=PATH", String, "Store CSV data to PATH.") do |path|
         @output_filename = path
+      end
+
+      @parser.on("-m", "--members=MEMBER1,MEMBER2,...", Array, "Members") do |members|
+        @members = members
+      end
+
+      @parser.on("-t", "--terms=TERM1,TERM2,TERM3,", Array,
+                 "Analyze commits in these terms.") do |terms|
+        @terms = terms.collect do |term_string|
+          CommitCommentTools::Term.parse(term_string)
+        end
+      end
+
+      @parser.on("-i", "--mail-info=PATH", String, "Commit mail information.") do |path|
+        @commit_mail_info = Pathname(path).realpath.to_s
       end
     end
 
@@ -62,7 +79,14 @@ Options:
       when :csv
         generator = CommitCommentTools::Generator::CSV.new(entries)
       when :png
-        raise "Not implemented yet."
+        # generator = CommitCommentTools::Generator::Graph.new(entries,
+        #                                                      output_filename: @output_filename,
+        #                                                      members: @members)
+      when :summary
+        generator = CommitCommentTools::Generator::Summary.new(entries,
+                                                               members: @members,
+                                                               terms: @terms,
+                                                               commit_mail_info: @commit_mail_info)
       else
         raise "Must not happen! format=<#{@format}>"
       end
