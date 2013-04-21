@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+require "csv"
+
 require "commit-comment-tools"
 
 module CommitCommentTools
@@ -25,6 +27,14 @@ module CommitCommentTools
 
     def calculate_average(total, n_elements)
       (total / n_elements.to_f).round(2)
+    end
+
+    def commit_average(path, term)
+      ::CSV.foreach(path, headers: true) do |row|
+        if row["TERM"] == term.label
+          return row["average(commit)"]
+        end
+      end
     end
   end
 end
