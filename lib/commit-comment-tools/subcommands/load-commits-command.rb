@@ -31,6 +31,8 @@ module CommitCommentTools::Subcommands
 Usage: #{$0} [options]
   e.g: #{$0} -d ./commits.db -r ./sample_project -b master
        #{$0} -d ./commits.db -r ./sample_project -b /pattern/
+
+Options:
   BANNER
 
       @parser.on("-r=PATH", "--repository=PATH", String, "Git repository path.") do |path|

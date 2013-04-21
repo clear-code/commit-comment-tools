@@ -35,6 +35,8 @@ module CommitCommentTools::Subcommands
       @parser.banner = <<-BANNER
 Usage: #{$0} [options]
   e.g: #{$0} -d ./commits.db
+
+Options:
   BANNER
 
       @parser.on("-d=PATH", "--database=PATH", String, "Database path.") do |path|
