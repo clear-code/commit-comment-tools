@@ -29,8 +29,8 @@ module CommitCommentTools
     def initialize(first, last, n_business_days)
       @first = first
       @last = last
-      @n_business_days = n_business_days
       @range = first..last
+      @n_business_days = n_business_days || @range.to_s.size
     end
 
     def label
