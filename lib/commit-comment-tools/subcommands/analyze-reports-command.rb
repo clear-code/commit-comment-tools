@@ -29,6 +29,7 @@ module CommitCommentTools::Subcommands
     def initialize
       super
       @format = :csv
+      @output_filename = nil
       @parser.banner = <<-BANNER
 Usage: #{$0} REPORT_DIRECTORY
  e.g.: #{$0} daily-report
@@ -42,6 +43,10 @@ Options:
                  "available formats: [#{available_formats.join(', ')}]",
                  "[#{@format}]") do |format|
         @format = format
+      end
+
+      @parser.on("-o", "--output-filename=PATH", String, "Store CSV data to PATH.") do |path|
+        @output_filename = path
       end
     end
 
@@ -62,7 +67,15 @@ Options:
         raise "Must not happen! format=<#{@format}>"
       end
 
-      generator.generate
+      output = generator.generate
+
+      if @output_filename.nil?
+        puts output
+      else
+        File.open(@output_filename, "w+") do |file|
+          file.puts output
+        end
+      end
     end
   end
 end

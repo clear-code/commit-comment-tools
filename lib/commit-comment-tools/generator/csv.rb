@@ -29,7 +29,8 @@ module CommitCommentTools
       def generate
         date_list = @entries.collect(&:date).sort.uniq
         members = @entries.collect(&:name).sort.uniq
-        csv_string = ::CSV.generate do |csv|
+
+        ::CSV.generate do |csv|
           csv << ["DATE", *members]
           date_list.each do |date|
             target_entries = extract_target_entries(date, members)
@@ -39,9 +40,6 @@ module CommitCommentTools
             csv << [date, *daily_read_ratios]
           end
         end
-
-        # TODO write to file
-        puts csv_string
       end
 
       private
