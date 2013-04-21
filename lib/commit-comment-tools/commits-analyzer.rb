@@ -43,14 +43,25 @@ module CommitCommentTools
       end
 
       ::CSV.generate do |csv|
-        csv << ["TERM", *create_header(@terms)]
+        csv << ["#TERM", *create_header(@terms), *create_header(@terms, "(stacked)")]
+        memo = []
         @ranges.each do |range|
           ratio_list = calculate_ratios(commit_groups, {diff_lines_count: range})
-          csv << [range.to_s, *ratio_list]
+          if memo.empty?
+            memo = ratio_list
+          else
+            memo = memo.zip(ratio_list).collect do |a, b|
+              (a + b).round(2)
+            end
+          end
+          csv << [range.to_s, *ratio_list, *memo]
         end
         over_max_ratio_list = calculate_ratios(commit_groups, ["diff_lines_count > ?", @max_lines])
-        csv << ["over #{@max_lines}", *over_max_ratio_list]
-        csv << ["TOTAL", *commit_groups.collect(&:count)]
+        memo = memo.zip(over_max_ratio_list).collect do |a, b|
+          (a + b).round(2)
+        end
+        csv << ["over #{@max_lines}", *over_max_ratio_list, *memo]
+        csv << ["#TOTAL", *commit_groups.collect(&:count)]
       end
     end
 
@@ -70,9 +81,9 @@ module CommitCommentTools
 
     private
 
-    def create_header(terms)
+    def create_header(terms, suffix="")
       terms.collect do |term|
-        term.label
+        "#{term.label}#{suffix}"
       end
     end
 
