@@ -35,7 +35,7 @@ module CommitCommentTools
 
       def generate
         ::CSV.generate do |csv|
-          csv << ["TERM", "average(commit)", "read ratio(%)", "comment ratio(%)"]
+          csv << ["#TERM", "average(commit)", "read ratio(%)", "comment ratio(%)"]
           @terms.each do |term|
             target_entries = @entries.select do |entry|
               @members.include?(entry.name) and term.include?(Date.parse(entry.date))
