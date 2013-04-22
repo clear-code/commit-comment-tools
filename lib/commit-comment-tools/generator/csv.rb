@@ -43,6 +43,7 @@ module CommitCommentTools
       end
 
       private
+
       def extract_target_entries(date, members)
         entries = @entries.select do |entry|
           entry.date == date
