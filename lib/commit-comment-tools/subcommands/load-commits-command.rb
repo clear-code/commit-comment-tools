@@ -39,6 +39,10 @@ Options:
         @repository_path = Pathname(path).realpath.to_s
       end
 
+      @parser.on("-B=NAME", "--base-branch=NAME", String) do |name|
+        @base_branch_name = name
+      end
+
       @parser.on("-b=NAME", "--branch=NAME", String,
                  "Load commits in matching branch NAME (patterns may be used).") do |name|
         pattern = name.slice(%r!\A/(.*)/\z!, 1)
@@ -56,7 +60,9 @@ Options:
 
     def exec(global_options, argv)
       ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: @db_path)
-      loader = CommitCommentTools::RepositoryLoader.new(@repository_path, @branch_name)
+      loader = CommitCommentTools::RepositoryLoader.new(@repository_path,
+                                                        @base_branch_name,
+                                                        @branch_name)
       loader.load_commits
     end
   end
