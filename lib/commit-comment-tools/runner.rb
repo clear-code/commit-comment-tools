@@ -29,8 +29,6 @@ end
 module CommitCommentTools
   class Runner
     def run(argv)
-      Signal.trap(:PIPE, 'IGNORE') rescue nil   # Win32 does not have SIGPIPE
-      Signal.trap(:INT) { exit 3 }
       prepare
       _run(argv)
     rescue Errno::EPIPE
