@@ -33,9 +33,10 @@ module CommitCommentTools
 Usage: #{$0} count-mails [options]
   e.g: #{$0} count-mails -d ./mails -o ./reports/commit-mail.csv \\
              --reply-from-patterns @example.com:/^From:.*?@example\\.com/,@example.net:/^From:.*@example\\.net/
-
-Options:
       BANNER
+
+        @parser.separator("")
+        @parser.separator("Options:")
 
         @parser.on("-d", "--directory=DIR", String, "Load mails from DIR.") do |dir|
           @directory = dir

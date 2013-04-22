@@ -36,9 +36,10 @@ module CommitCommentTools
         @parser.banner = <<-BANNER
 Usage: #{$0} REPORT_DIRECTORY
  e.g.: #{$0} daily-report
-
-Options:
       BANNER
+
+        @parser.separator("")
+        @parser.separator("Options:")
 
         available_formats = [:csv, :png, :summary]
         @parser.on("-f=FORMAT", "--format=FORMAT", available_formats,

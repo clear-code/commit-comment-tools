@@ -48,9 +48,10 @@ Subcommands:
     analyze-reports  Analyze daily reports.
     fetch-mails      Fetch commit mails.
     count-mails      Count commit mails.
-
-Global Opions:
       BANNER
+
+      @parser.separator("")
+      @parser.separator("Global Opions:")
 
       @parser.on('--help', 'Prints this message and quit.') do
         $stderr.puts @parser.help

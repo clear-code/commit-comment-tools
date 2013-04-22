@@ -32,9 +32,10 @@ module CommitCommentTools
 Usage: #{$0} [options]
   e.g: #{$0} -d ./commits.db -r ./sample_project -b master
        #{$0} -d ./commits.db -r ./sample_project -b /pattern/
-
-Options:
   BANNER
+
+        @parser.separator("")
+        @parser.separator("Options:")
 
         @parser.on("-r=PATH", "--repository=PATH", String, "Git repository path.") do |path|
           @repository_path = Pathname(path).realpath.to_s
