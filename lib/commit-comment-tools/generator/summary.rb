@@ -51,7 +51,7 @@ module CommitCommentTools
                 memo + 1
               end
             end
-            n_entries = target_entries.size
+            n_entries = term.n_business_days * @members.size
             csv << [term.label,
                     commit_average(@commit_mail_info, term),
                     calculate_average(total_read_ratio, n_entries),
