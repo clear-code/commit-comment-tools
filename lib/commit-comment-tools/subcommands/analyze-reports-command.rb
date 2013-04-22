@@ -28,7 +28,7 @@ require "commit-comment-tools/generator/summary"
 
 module CommitCommentTools
   module Subcommands
-    class AnalyzeReportsCommand < CommitCommentTools::Subcommand
+    class AnalyzeReportsCommand < Subcommand
       def initialize
         super
         @format = :csv
@@ -59,7 +59,7 @@ Options:
         @parser.on("-t", "--terms=TERM1,TERM2,TERM3,", Array,
                    "Analyze commits in these terms.") do |terms|
           @terms = terms.collect do |term_string|
-            CommitCommentTools::Term.parse(term_string)
+            Term.parse(term_string)
           end
         end
 
@@ -74,20 +74,20 @@ Options:
         end
 
         report_directory = argv.shift
-        entries = CommitCommentTools::ReportParser.parse(report_directory)
+        entries = ReportParser.parse(report_directory)
 
         case @format
         when :csv
-          generator = CommitCommentTools::Generator::CSV.new(entries)
+          generator = Generator::CSV.new(entries)
         when :png
-          # generator = CommitCommentTools::Generator::Graph.new(entries,
-          #                                                      output_filename: @output_filename,
-          #                                                      members: @members)
+          # generator = Generator::Graph.new(entries,
+          #                                  output_filename: @output_filename,
+          #                                  members: @members)
         when :summary
-          generator = CommitCommentTools::Generator::Summary.new(entries,
-                                                                 members: @members,
-                                                                 terms: @terms,
-                                                                 commit_mail_info: @commit_mail_info)
+          generator = Generator::Summary.new(entries,
+                                             members: @members,
+                                             terms: @terms,
+                                             commit_mail_info: @commit_mail_info)
         else
           raise "Must not happen! format=<#{@format}>"
         end

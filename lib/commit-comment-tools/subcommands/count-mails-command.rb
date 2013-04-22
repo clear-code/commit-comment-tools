@@ -22,7 +22,7 @@ require "commit-comment-tools/mail-counter"
 
 module CommitCommentTools
   module Subcommands
-    class CountMailsCommand < CommitCommentTools::Subcommand
+    class CountMailsCommand < Subcommand
       def initialize
         super
         @directory = nil
@@ -48,7 +48,7 @@ Options:
         @parser.on("-t", "--terms=TERM1,TERM2,TERM3,", Array,
                    "Analyze commits in these terms.") do |terms|
           @terms = terms.collect do |term_string|
-            CommitCommentTools::Term.parse(term_string)
+            Term.parse(term_string)
           end
         end
 
@@ -67,7 +67,7 @@ Options:
       end
 
       def exec(global_options, argv)
-        mail_counter = CommitCommentTools::MailCounter.new(@directory, @terms, @reply_from_patterns)
+        mail_counter = MailCounter.new(@directory, @terms, @reply_from_patterns)
         if @output_filename
           File.open(@output_filename, "wb+") do |file|
             file.puts mail_counter.count

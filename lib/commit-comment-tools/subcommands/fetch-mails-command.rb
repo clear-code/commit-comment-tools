@@ -22,7 +22,7 @@ require "commit-comment-tools/mail-fetcher"
 
 module CommitCommentTools
   module Subcommands
-    class FetchMailsCommand < CommitCommentTools::Subcommand
+    class FetchMailsCommand < Subcommand
       def initialize
         super
         @mode = :imap
@@ -78,7 +78,7 @@ Options:
         @parser.on("-t", "--terms=TERM1,TERM2,TERM3,", Array,
                    "Analyze commits in these terms.") do |terms|
           @terms = terms.collect do |term_string|
-            CommitCommentTools::Term.parse(term_string)
+            Term.parse(term_string)
           end
         end
 
@@ -88,7 +88,7 @@ Options:
       end
 
       def exec(global_options, argv)
-        fetcher = CommitCommentTools::MailFetcher.new(@mode, @terms, @output_directory, @options)
+        fetcher = MailFetcher.new(@mode, @terms, @output_directory, @options)
         fetcher.fetch
       end
     end

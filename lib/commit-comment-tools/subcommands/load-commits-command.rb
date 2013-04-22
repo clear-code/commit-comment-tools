@@ -22,7 +22,7 @@ require "commit-comment-tools/repository-loader"
 
 module CommitCommentTools
   module Subcommands
-    class LoadCommitsCommand < CommitCommentTools::Subcommand
+    class LoadCommitsCommand < Subcommand
       def initialize
         super
         @repository_path = nil
@@ -61,9 +61,9 @@ Options:
 
       def exec(global_options, argv)
         ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: @db_path)
-        loader = CommitCommentTools::RepositoryLoader.new(@repository_path,
-                                                          @base_branch_name,
-                                                          @branch_name)
+        loader = RepositoryLoader.new(@repository_path,
+                                      @base_branch_name,
+                                      @branch_name)
         loader.load_commits
       end
     end

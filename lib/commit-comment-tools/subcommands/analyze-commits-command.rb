@@ -23,7 +23,7 @@ require "commit-comment-tools/commits-analyzer"
 
 module CommitCommentTools
   module Subcommands
-    class AnalyzeCommitsCommand < CommitCommentTools::Subcommand
+    class AnalyzeCommitsCommand < Subcommand
       def initialize
         super
         @db_path = nil
@@ -56,7 +56,7 @@ Options:
         @parser.on("-t", "--terms=TERM1,TERM2,TERM3,", Array,
                    "Analyze commits in these terms.") do |terms|
           @terms = terms.collect do |term_string|
-            CommitCommentTools::Term.parse(term_string)
+            Term.parse(term_string)
           end
         end
 
@@ -88,7 +88,7 @@ Options:
       end
 
       def exec(global_options, argv)
-        analyzer = CommitCommentTools::CommitsAnalyzer.new(@db_path, @max_lines, @step, @terms, @format)
+        analyzer = CommitsAnalyzer.new(@db_path, @max_lines, @step, @terms, @format)
         case @mode
         when :pareto
           csv_string = analyzer.pareto
