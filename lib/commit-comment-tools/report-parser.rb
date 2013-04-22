@@ -22,7 +22,7 @@ module CommitCommentTools
     class << self
       def parse(report_directory=nil)
         report_directory ||= "."
-        report_unexpanded_path = File.join(report_directory, "**", "*.txt")
+        report_unexpanded_path = File.join(report_directory, "*.txt")
         report_file_paths = Dir.glob(report_unexpanded_path)
 
         new.parse(report_file_paths)
