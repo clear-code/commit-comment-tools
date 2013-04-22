@@ -33,6 +33,10 @@ module CommitCommentTools
         super
         @format = :csv
         @output_filename = nil
+        prepare
+      end
+
+      def prepare
         @parser.banner = <<-BANNER
 Usage: #{$0} REPORT_DIRECTORY
  e.g.: #{$0} daily-report

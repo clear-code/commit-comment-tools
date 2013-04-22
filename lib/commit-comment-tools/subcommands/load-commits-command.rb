@@ -28,6 +28,10 @@ module CommitCommentTools
         @repository_path = nil
         @branch_name = nil
         @db_path = nil
+        prepare
+      end
+
+      def prepare
         @parser.banner = <<-BANNER
 Usage: #{$0} [options]
   e.g: #{$0} -d ./commits.db -r ./sample_project -b master

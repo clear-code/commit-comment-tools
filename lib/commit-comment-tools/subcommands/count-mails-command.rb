@@ -29,6 +29,10 @@ module CommitCommentTools
         @output_filename = nil
         @terms = []
         @reply_from_patterns = {}
+        prepare
+      end
+
+      def prepare
         @parser.banner = <<-BANNER
 Usage: #{$0} count-mails [options]
   e.g: #{$0} count-mails -d ./mails -o ./reports/commit-mail.csv \\

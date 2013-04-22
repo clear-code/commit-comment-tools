@@ -33,6 +33,10 @@ module CommitCommentTools
         @mode = :pareto
         @output_filename = nil
         @terms = []
+        prepare
+      end
+
+      def prepare
         @parser.banner = <<-BANNER
 Usage: #{$0} [options]
   e.g: #{$0} -d ./commits.db

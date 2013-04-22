@@ -36,6 +36,10 @@ module CommitCommentTools
         }
         @terms = []
         @output_directory = nil
+        prepare
+      end
+
+      def prepare
         @parser.banner = <<-BANNER
 Usage: #{$0} [options]
   e.g: #{$0} -s imap.example.com -p 143 -u username -p password --no-ssl \\
