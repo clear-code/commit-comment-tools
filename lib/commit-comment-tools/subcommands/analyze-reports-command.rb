@@ -28,80 +28,80 @@ require "commit-comment-tools/generator/summary"
 
 module CommitCommentTools
   module Subcommands
-  class AnalyzeReportsCommand < CommitCommentTools::Subcommand
-    def initialize
-      super
-      @format = :csv
-      @output_filename = nil
-      @parser.banner = <<-BANNER
+    class AnalyzeReportsCommand < CommitCommentTools::Subcommand
+      def initialize
+        super
+        @format = :csv
+        @output_filename = nil
+        @parser.banner = <<-BANNER
 Usage: #{$0} REPORT_DIRECTORY
  e.g.: #{$0} daily-report
 
 Options:
       BANNER
 
-      available_formats = [:csv, :png, :summary]
-      @parser.on("-f=FORMAT", "--format=FORMAT", available_formats,
-                 "Output format",
-                 "available formats: [#{available_formats.join(', ')}]",
-                 "[#{@format}]") do |format|
-        @format = format
-      end
+        available_formats = [:csv, :png, :summary]
+        @parser.on("-f=FORMAT", "--format=FORMAT", available_formats,
+                   "Output format",
+                   "available formats: [#{available_formats.join(', ')}]",
+                   "[#{@format}]") do |format|
+          @format = format
+        end
 
-      @parser.on("-o", "--output-filename=PATH", String, "Store CSV data to PATH.") do |path|
-        @output_filename = path
-      end
+        @parser.on("-o", "--output-filename=PATH", String, "Store CSV data to PATH.") do |path|
+          @output_filename = path
+        end
 
-      @parser.on("-m", "--members=MEMBER1,MEMBER2,...", Array, "Members") do |members|
-        @members = members
-      end
+        @parser.on("-m", "--members=MEMBER1,MEMBER2,...", Array, "Members") do |members|
+          @members = members
+        end
 
-      @parser.on("-t", "--terms=TERM1,TERM2,TERM3,", Array,
-                 "Analyze commits in these terms.") do |terms|
-        @terms = terms.collect do |term_string|
-          CommitCommentTools::Term.parse(term_string)
+        @parser.on("-t", "--terms=TERM1,TERM2,TERM3,", Array,
+                   "Analyze commits in these terms.") do |terms|
+          @terms = terms.collect do |term_string|
+            CommitCommentTools::Term.parse(term_string)
+          end
+        end
+
+        @parser.on("-i", "--mail-info=PATH", String, "Commit mail information.") do |path|
+          @commit_mail_info = Pathname(path).realpath.to_s
         end
       end
 
-      @parser.on("-i", "--mail-info=PATH", String, "Commit mail information.") do |path|
-        @commit_mail_info = Pathname(path).realpath.to_s
-      end
-    end
+      def exec(global_options, argv)
+        unless ARGV.size == 1
+          option_error("Please specify only 1 arugments for #{$0}.")
+        end
 
-    def exec(global_options, argv)
-      unless ARGV.size == 1
-        option_error("Please specify only 1 arugments for #{$0}.")
-      end
+        report_directory = argv.shift
+        entries = CommitCommentTools::ReportParser.parse(report_directory)
 
-      report_directory = argv.shift
-      entries = CommitCommentTools::ReportParser.parse(report_directory)
+        case @format
+        when :csv
+          generator = CommitCommentTools::Generator::CSV.new(entries)
+        when :png
+          # generator = CommitCommentTools::Generator::Graph.new(entries,
+          #                                                      output_filename: @output_filename,
+          #                                                      members: @members)
+        when :summary
+          generator = CommitCommentTools::Generator::Summary.new(entries,
+                                                                 members: @members,
+                                                                 terms: @terms,
+                                                                 commit_mail_info: @commit_mail_info)
+        else
+          raise "Must not happen! format=<#{@format}>"
+        end
 
-      case @format
-      when :csv
-        generator = CommitCommentTools::Generator::CSV.new(entries)
-      when :png
-        # generator = CommitCommentTools::Generator::Graph.new(entries,
-        #                                                      output_filename: @output_filename,
-        #                                                      members: @members)
-      when :summary
-        generator = CommitCommentTools::Generator::Summary.new(entries,
-                                                               members: @members,
-                                                               terms: @terms,
-                                                               commit_mail_info: @commit_mail_info)
-      else
-        raise "Must not happen! format=<#{@format}>"
-      end
+        output = generator.generate
 
-      output = generator.generate
-
-      if @output_filename.nil?
-        puts output
-      else
-        File.open(@output_filename, "w+") do |file|
-          file.puts output
+        if @output_filename.nil?
+          puts output
+        else
+          File.open(@output_filename, "w+") do |file|
+            file.puts output
+          end
         end
       end
     end
-  end
   end
 end
