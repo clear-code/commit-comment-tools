@@ -20,7 +20,8 @@ require "pathname"
 
 require "commit-comment-tools/mail-counter"
 
-module CommitCommentTools::Subcommands
+module CommitCommentTools
+  module Subcommands
   class CountMailsCommand < CommitCommentTools::Subcommand
     def initialize
       super
@@ -75,5 +76,6 @@ Options:
         puts mail_counter.count
       end
     end
+  end
   end
 end

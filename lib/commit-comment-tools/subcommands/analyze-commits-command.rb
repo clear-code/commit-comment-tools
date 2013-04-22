@@ -21,7 +21,8 @@ require "pathname"
 
 require "commit-comment-tools/commits-analyzer"
 
-module CommitCommentTools::Subcommands
+module CommitCommentTools
+  module Subcommands
   class AnalyzeCommitsCommand < CommitCommentTools::Subcommand
     def initialize
       super
@@ -102,5 +103,6 @@ Options:
         puts csv_string
       end
     end
+  end
   end
 end

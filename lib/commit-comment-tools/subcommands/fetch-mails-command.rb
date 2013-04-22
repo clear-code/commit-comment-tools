@@ -20,7 +20,8 @@ require "pathname"
 
 require "commit-comment-tools/mail-fetcher"
 
-module CommitCommentTools::Subcommands
+module CommitCommentTools
+  module Subcommands
   class FetchMailsCommand < CommitCommentTools::Subcommand
     def initialize
       super
@@ -90,5 +91,6 @@ Options:
       fetcher = CommitCommentTools::MailFetcher.new(@mode, @terms, @output_directory, @options)
       fetcher.fetch
     end
+  end
   end
 end

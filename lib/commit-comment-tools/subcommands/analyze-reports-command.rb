@@ -26,7 +26,8 @@ require "commit-comment-tools/generator/csv"
 require "commit-comment-tools/generator/graph"
 require "commit-comment-tools/generator/summary"
 
-module CommitCommentTools::Subcommands
+module CommitCommentTools
+  module Subcommands
   class AnalyzeReportsCommand < CommitCommentTools::Subcommand
     def initialize
       super
@@ -101,5 +102,6 @@ Options:
         end
       end
     end
+  end
   end
 end

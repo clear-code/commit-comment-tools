@@ -20,7 +20,8 @@ require "pathname"
 
 require "commit-comment-tools/repository-loader"
 
-module CommitCommentTools::Subcommands
+module CommitCommentTools
+  module Subcommands
   class LoadCommitsCommand < CommitCommentTools::Subcommand
     def initialize
       super
@@ -65,5 +66,6 @@ Options:
                                                         @branch_name)
       loader.load_commits
     end
+  end
   end
 end
