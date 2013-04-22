@@ -39,7 +39,7 @@ Options:
         @repository_path = Pathname(path).realpath.to_s
       end
 
-      @parser.on("-B=NAME", "--base-branch=NAME", String) do |name|
+      @parser.on("-B=NAME", "--base-branch=NAME", String, "Base branch name.") do |name|
         @base_branch_name = name
       end
 
