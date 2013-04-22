@@ -95,7 +95,7 @@ Options:
         csv_string = analyzer.average
       end
       if @output_filename
-        File.open(output_filename, "w+") do |file|
+        File.open(@output_filename, "w+") do |file|
           file.puts csv_string
         end
       else
