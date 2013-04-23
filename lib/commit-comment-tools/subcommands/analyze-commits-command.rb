@@ -49,7 +49,7 @@ Usage: #{$0} [options]
           @db_path = Pathname(path).expand_path.to_s
         end
 
-        @parser.on("-m=MAX_LINES", "--max=MAX_LINES", Integer,
+        @parser.on("-M=MAX_LINES", "--max=MAX_LINES", Integer,
                    "Max lines of diff. [#{@max_lines}]") do |max_lines|
           @max_lines = max_lines
         end
