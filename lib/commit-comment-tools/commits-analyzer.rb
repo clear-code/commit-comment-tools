@@ -71,7 +71,7 @@ module CommitCommentTools
       ::CSV.generate do |csv|
         csv << ["#Average", "コミット数", "lines"]
         @terms.each do |term|
-          commit_group = Commit.where(committed_date: term.range).where("diff_lines_count <= ?", 300)
+          commit_group = Commit.where(committed_date: term.range).where("diff_lines_count <= ?", @max_lines)
           n_commits = commit_group.count
           n_days = commit_group.all.group_by{|commit| commit.committed_date.strftime("%Y%m%d") }.size
           n_lines = commit_group.sum(:diff_lines_count)
