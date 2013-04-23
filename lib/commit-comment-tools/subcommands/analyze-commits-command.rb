@@ -41,7 +41,7 @@ module CommitCommentTools
         @parser.banner = <<-BANNER
 Usage: #{$0} [options]
   e.g: #{$0} -d ./commits.db
-  BANNER
+        BANNER
 
         @parser.separator("")
         @parser.separator("Options:")
