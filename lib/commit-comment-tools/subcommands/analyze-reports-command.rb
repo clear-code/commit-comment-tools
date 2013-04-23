@@ -40,7 +40,7 @@ module CommitCommentTools
         @parser.banner = <<-BANNER
 Usage: #{$0} REPORT_DIRECTORY
  e.g.: #{$0} daily-report
-      BANNER
+        BANNER
 
         @parser.separator("")
         @parser.separator("Options:")

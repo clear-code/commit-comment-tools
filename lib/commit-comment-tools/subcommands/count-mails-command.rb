@@ -37,7 +37,7 @@ module CommitCommentTools
 Usage: #{$0} count-mails [options]
   e.g: #{$0} count-mails -d ./mails -o ./reports/commit-mail.csv \\
              --reply-from-patterns @example.com:/^From:.*?@example\\.com/,@example.net:/^From:.*@example\\.net/
-      BANNER
+        BANNER
 
         @parser.separator("")
         @parser.separator("Options:")

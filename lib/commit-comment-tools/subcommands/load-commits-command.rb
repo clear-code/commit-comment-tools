@@ -36,7 +36,7 @@ module CommitCommentTools
 Usage: #{$0} [options]
   e.g: #{$0} -d ./commits.db -r ./sample_project -b master
        #{$0} -d ./commits.db -r ./sample_project -b /pattern/
-  BANNER
+        BANNER
 
         @parser.separator("")
         @parser.separator("Options:")

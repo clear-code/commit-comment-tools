@@ -45,7 +45,7 @@ Usage: #{$0} [options]
   e.g: #{$0} -s imap.example.com -p 143 -u username -p password --no-ssl \\
              -t 2013-02-01:2013-02-28,2013-03-01:2013-03-31 \\
              -m commit -d /tmp/mails
-    BANNER
+        BANNER
 
         @parser.separator("")
         @parser.separator("Options:")
