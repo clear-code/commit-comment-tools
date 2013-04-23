@@ -33,6 +33,7 @@ module CommitCommentTools
         @mode = :pareto
         @output_filename = nil
         @terms = []
+        @all = false
         prepare
       end
 
@@ -84,6 +85,11 @@ Usage: #{$0} [options]
         @parser.on("-o=PATH", "--output-filename=PATH", String, "Output filename.") do |path|
           @output_filename = Pathname(path).expand_path.to_s
         end
+
+        @parser.on("-a", "--all", "Include all commits.",
+                   "This option is effective in pareto mode only.") do
+          @all = true
+        end
       end
 
       def parse(argv)
@@ -93,7 +99,7 @@ Usage: #{$0} [options]
       end
 
       def exec(global_options, argv)
-        analyzer = CommitsAnalyzer.new(@db_path, @max_lines, @step, @terms, @format)
+        analyzer = CommitsAnalyzer.new(@db_path, @max_lines, @step, @terms, @format, @all)
         case @mode
         when :pareto
           csv_string = analyzer.pareto

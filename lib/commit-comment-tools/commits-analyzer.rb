@@ -26,20 +26,25 @@ module CommitCommentTools
   class CommitsAnalyzer
     include CommitCommentTools::Utility
 
-    def initialize(db_path, max_lines, step, terms, format)
+    def initialize(db_path, max_lines, step, terms, format, all)
       @db_path = db_path
       @max_lines = max_lines
       @step = step
       @ranges = create_ranges(max_lines, step)
       @terms = terms
       @format = format
+      @all = all
     end
 
     def pareto
       ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: @db_path)
 
       commit_groups = @terms.collect do |term|
-        Commit.where(committed_date: term.range).where("diff_lines_count <= ?", @max_lines)
+        if @all
+          Commit.where(committed_date: term.range)
+        else
+          Commit.where(committed_date: term.range).where("diff_lines_count <= ?", @max_lines)
+        end
       end
 
       ::CSV.generate do |csv|
@@ -56,11 +61,13 @@ module CommitCommentTools
           end
           csv << [range.to_s, *ratio_list, *memo]
         end
-        # over_max_ratio_list = calculate_ratios(commit_groups, ["diff_lines_count > ?", @max_lines])
-        # memo = memo.zip(over_max_ratio_list).collect do |a, b|
-        #   (a + b).round(2)
-        # end
-        # csv << ["over #{@max_lines}", *over_max_ratio_list, *memo]
+        if @all
+          over_max_ratio_list = calculate_ratios(commit_groups, ["diff_lines_count > ?", @max_lines])
+          memo = memo.zip(over_max_ratio_list).collect do |a, b|
+            (a + b).round(2)
+          end
+          csv << ["over #{@max_lines}", *over_max_ratio_list, *memo]
+        end
         csv << ["#TOTAL", *commit_groups.collect(&:count)]
       end
     end
