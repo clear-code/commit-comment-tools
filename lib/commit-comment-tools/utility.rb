@@ -21,7 +21,7 @@ require "commit-comment-tools"
 
 module CommitCommentTools
   module Utility
-    def calculate_ratio(amount, total_amount)
+    def calculate_percentage(amount, total_amount)
       ((amount / total_amount.to_f) * 100).round(2)
     end
 

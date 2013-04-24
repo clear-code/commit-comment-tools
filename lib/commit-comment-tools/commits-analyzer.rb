@@ -51,7 +51,7 @@ module CommitCommentTools
         csv << ["#TERM", *create_header(@terms), *create_header(@terms, "(stacked)")]
         memo = []
         @ranges.each do |range|
-          ratio_list = calculate_ratios(commit_groups, {diff_lines_count: range})
+          ratio_list = calculate_percentages(commit_groups, {diff_lines_count: range})
           if memo.empty?
             memo = ratio_list
           else
@@ -62,7 +62,7 @@ module CommitCommentTools
           csv << [range.to_s, *ratio_list, *memo]
         end
         if @all
-          over_max_ratio_list = calculate_ratios(commit_groups, ["diff_lines_count > ?", @max_lines])
+          over_max_ratio_list = calculate_percentages(commit_groups, ["diff_lines_count > ?", @max_lines])
           memo = memo.zip(over_max_ratio_list).collect do |a, b|
             (a + b).round(2)
           end
@@ -107,11 +107,11 @@ module CommitCommentTools
       end
     end
 
-    def calculate_ratios(commit_groups, condition)
+    def calculate_percentages(commit_groups, condition)
       commit_groups.collect do |commit_group|
         n_commits = commit_group.where(condition).count
         n_total_commits = commit_group.count
-        calculate_ratio(n_commits, n_total_commits)
+        calculate_percentage(n_commits, n_total_commits)
       end
     end
   end

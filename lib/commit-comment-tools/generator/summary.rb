@@ -55,7 +55,7 @@ module CommitCommentTools
             csv << [term.label,
                     commit_average(@commit_mail_info, term),
                     calculate_average(total_read_ratio, n_entries),
-                    calculate_ratio(n_comments, n_entries)]
+                    calculate_percentage(n_comments, n_entries)]
           end
         end
       end
