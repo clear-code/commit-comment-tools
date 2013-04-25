@@ -32,5 +32,10 @@ module CommitCommentTools
       actual = Term.parse(target)
       assert_equal(expected, actual)
     end
+
+    def test_label
+      term = Term.new(Date.parse("2013-03-01"), Date.parse("2013-03-31"), 20)
+      assert_equal("03/01-03/31", term.label)
+    end
   end
 end

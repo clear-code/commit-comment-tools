@@ -43,7 +43,7 @@ module CommitCommentTools
     end
 
     def label
-      @range.to_s
+      "%s-%s" % [@first.strftime("%m/%d"), @last.strftime("%m/%d")]
     end
 
     def include?(date)
