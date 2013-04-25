@@ -17,6 +17,7 @@
 
 require "commit-comment-tools/term"
 
+module CommitCommentTools
 class TermTest < Test::Unit::TestCase
   data("with out business days" => ["2013-03-01:2013-03-31",
                                     CommitCommentTools::Term.new(Date.parse("2013-03-01"),
@@ -31,4 +32,5 @@ class TermTest < Test::Unit::TestCase
     actual = CommitCommentTools::Term.parse(target)
     assert_equal(actual, expected)
   end
+end
 end
