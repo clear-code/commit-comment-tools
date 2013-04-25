@@ -30,7 +30,7 @@ module CommitCommentTools
     def test_term_parse(data)
       target, expected = data
       actual = Term.parse(target)
-      assert_equal(actual, expected)
+      assert_equal(expected, actual)
     end
   end
 end
