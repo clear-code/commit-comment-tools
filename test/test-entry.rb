@@ -17,6 +17,7 @@
 
 require "commit-comment-tools/entry"
 
+module CommitCommentTools
 class EntryTest < Test::Unit::TestCase
   def test_name
     expected_name = "yamada"
@@ -50,7 +51,7 @@ class EntryTest < Test::Unit::TestCase
          :slash_separate => "2013/02/05",
          :nonexistent    => "")
     def test_date(invalid_date)
-      assert_raise(CommitCommentTools::Entry::InvalidEntryError) do
+      assert_raise(Entry::InvalidEntryError) do
         generate_entry(:date => invalid_date)
       end
     end
@@ -59,7 +60,7 @@ class EntryTest < Test::Unit::TestCase
          :no_number      => "NoNumber",
          :nonexistent    => "")
     def test_read_ratio(invalid_read_ratio)
-      assert_raise(CommitCommentTools::Entry::InvalidEntryError) do
+      assert_raise(Entry::InvalidEntryError) do
         generate_entry(:read_ratio => invalid_read_ratio)
       end
     end
@@ -73,6 +74,7 @@ class EntryTest < Test::Unit::TestCase
     comment    = options[:comment]    || "あんまり読めなかった。"
 
     entry_chunk = "#{date}:#{read_ratio}%:#{comment}"
-    CommitCommentTools::Entry.new(name, entry_chunk)
+    Entry.new(name, entry_chunk)
   end
+end
 end
