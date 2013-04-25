@@ -22,12 +22,12 @@ require "commit-comment-tools"
 module CommitCommentTools
   module Utility
     def calculate_percentage(amount, total_amount)
-      raise ZeroDivisionError if total_amount == 0
+      raise ZeroDivisionError if total_amount.zero?
       ((amount / total_amount.to_f) * 100).round(2)
     end
 
     def calculate_average(total, n_elements)
-      raise ZeroDivisionError if n_elements == 0
+      raise ZeroDivisionError if n_elements.zero?
       (total / n_elements.to_f).round(2)
     end
 
