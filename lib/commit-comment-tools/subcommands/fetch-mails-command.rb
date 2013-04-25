@@ -51,24 +51,24 @@ Usage: #{$0} [options]
         @parser.separator("Options:")
 
         available_modes = [:imap, :pop]
-        @parser.on("-M=MODE", "--mode=MODE", available_modes, "Fetch mails via MODE",
+        @parser.on("-M", "--mode=MODE", available_modes, "Fetch mails via MODE",
                    "available modes #{available_modes.join(', ')}", "[#{@mode}]") do |mode|
           @mode = mode
         end
 
-        @parser.on("-s=ADDRESS", "--server=ADDRESS", String, "IMAP server address.") do |server|
+        @parser.on("-s", "--server=ADDRESS", String, "IMAP server address.") do |server|
           @options[:server] = server
         end
 
-        @parser.on("-P=PORT", "--port=PORT", Integer, "Port number. [143]") do |port|
+        @parser.on("-P", "--port=PORT", Integer, "Port number. [143]") do |port|
           @options[:port] = port
         end
 
-        @parser.on("-u=USERNAME", "--username=USERNAME", "User name for IMAP login.") do |username|
+        @parser.on("-u", "--username=USERNAME", "User name for IMAP login.") do |username|
           @options[:username] = username
         end
 
-        @parser.on("-p=PASSWORD", "--password=PASSWORD", "Password for IMAP login.") do |password|
+        @parser.on("-p", "--password=PASSWORD", "Password for IMAP login.") do |password|
           @options[:password] = password
         end
 
@@ -76,7 +76,7 @@ Usage: #{$0} [options]
           @options[:ssl] = ssl
         end
 
-        @parser.on("-m=MAILBOX", "--mailbox=MAILBOX", String, "IMAP mailbox name. [INBOX]") do |mailbox|
+        @parser.on("-m", "--mailbox=MAILBOX", String, "IMAP mailbox name. [INBOX]") do |mailbox|
           @options[:mailbox] = mailbox
         end
 
@@ -87,7 +87,7 @@ Usage: #{$0} [options]
           end
         end
 
-        @parser.on("-o=DIR", "--output-directory=DIR", String, "Store mails in DIR") do |directory|
+        @parser.on("-o", "--output-directory=DIR", String, "Store mails in DIR") do |directory|
           @output_directory = directory
         end
       end

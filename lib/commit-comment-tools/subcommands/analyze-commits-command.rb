@@ -46,16 +46,16 @@ Usage: #{$0} [options]
         @parser.separator("")
         @parser.separator("Options:")
 
-        @parser.on("-d=PATH", "--database=PATH", String, "Database path.") do |path|
+        @parser.on("-d", "--database=PATH", String, "Database path.") do |path|
           @db_path = Pathname(path).expand_path.to_s
         end
 
-        @parser.on("-M=MAX_LINES", "--max=MAX_LINES", Integer,
+        @parser.on("-M", "--max=MAX_LINES", Integer,
                    "Max lines of diff. [#{@max_lines}]") do |max_lines|
           @max_lines = max_lines
         end
 
-        @parser.on("-s=STEP", "--step=STEP", Integer, "Step. [#{@step}]") do |step|
+        @parser.on("-s", "--step=STEP", Integer, "Step. [#{@step}]") do |step|
           @step = step
         end
 
@@ -67,7 +67,7 @@ Usage: #{$0} [options]
         end
 
         available_formats = [:csv, :png]
-        @parser.on("-f=FORMAT", "--format=FORMAT", available_formats,
+        @parser.on("-f", "--format=FORMAT", available_formats,
                    "Output format",
                    "available formats: [#{available_formats.join(', ')}]",
                    "[#{@format}]") do |format|
@@ -75,14 +75,14 @@ Usage: #{$0} [options]
         end
 
         available_modes = [:pareto, :average]
-        @parser.on("-m=MODE", "--mode=MODE", available_modes,
+        @parser.on("-m", "--mode=MODE", available_modes,
                    "Output mode",
                    "available modes: [#{available_modes.join(', ')}]",
                    "[#{@mode}]") do |mode|
           @mode = mode
         end
 
-        @parser.on("-o=PATH", "--output-filename=PATH", String, "Output filename.") do |path|
+        @parser.on("-o", "--output-filename=PATH", String, "Output filename.") do |path|
           @output_filename = Pathname(path).expand_path.to_s
         end
 

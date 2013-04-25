@@ -41,15 +41,15 @@ Usage: #{$0} [options]
         @parser.separator("")
         @parser.separator("Options:")
 
-        @parser.on("-r=PATH", "--repository=PATH", String, "Git repository path.") do |path|
+        @parser.on("-r", "--repository=PATH", String, "Git repository path.") do |path|
           @repository_path = Pathname(path).realpath.to_s
         end
 
-        @parser.on("-B=NAME", "--base-branch=NAME", String, "Base branch name.") do |name|
+        @parser.on("-B", "--base-branch=NAME", String, "Base branch name.") do |name|
           @base_branch_name = name
         end
 
-        @parser.on("-b=NAME", "--branch=NAME", String,
+        @parser.on("-b", "--branch=NAME", String,
                    "Load commits in matching branch NAME (patterns may be used).") do |name|
           pattern = name.slice(%r!\A/(.*)/\z!, 1)
           if pattern
@@ -59,7 +59,7 @@ Usage: #{$0} [options]
           end
         end
 
-        @parser.on("-d=PATH", "--database=PATH", String, "Database path.") do |path|
+        @parser.on("-d", "--database=PATH", String, "Database path.") do |path|
           @db_path = Pathname(path).expand_path.to_s
         end
       end
