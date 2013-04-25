@@ -4,4 +4,4 @@ rvm:
   - ruby-head
 notifications:
   recipients:
-    - okimoto@clear-code.com
+    - travis@clear-code.com
