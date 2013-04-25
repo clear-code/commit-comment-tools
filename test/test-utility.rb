@@ -24,7 +24,19 @@ class UtilityTest < Test::Unit::TestCase
     assert_equal(1.0, calculate_percentage(10, 1000))
   end
 
+  def test_calculate_percentage_division_by_zero
+    assert_raise(ZeroDivisionError) do
+      calculate_percentage(10, 0)
+    end
+  end
+
   def test_calculate_average
     assert_equal(10.0, calculate_average(1000, 100))
+  end
+
+  def test_calculate_average_division_by_sero
+    assert_raise(ZeroDivisionError) do
+      calculate_average(1000, 0)
+    end
   end
 end
