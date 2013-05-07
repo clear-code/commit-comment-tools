@@ -87,4 +87,24 @@ COMMENT
 
     assert_equal(expected_entries, actual_entries.collect(&:to_hash))
   end
+
+  def test_reverse_order
+    report_io = StringIO.new(<<-REPORT)
+2013-2-3:10%:
+2013-2-2:50%:
+  PHPのコードを久しぶりに書いた
+  データ駆動を使ってテストがどんどん書き直されていた
+2013-2-1:80%:typoが多かった
+REPORT
+
+    actual_entries = @parser.parse_stream("taro", report_io)
+    continues_comment = "PHPのコードを久しぶりに書いた\n" +
+                          "データ駆動を使ってテストがどんどん書き直されていた"
+    expected_entries = [
+      {:name => "taro", :date => "2013-02-03", :read_ratio => 10, :comment => ""},
+      {:name => "taro", :date => "2013-02-02", :read_ratio => 50, :comment => continues_comment},
+      {:name => "taro", :date => "2013-02-01", :read_ratio => 80, :comment => "typoが多かった"},
+    ]
+    assert_equal(expected_entries, actual_entries.collect(&:to_hash))
+  end
 end
