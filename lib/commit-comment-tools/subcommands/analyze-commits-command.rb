@@ -95,7 +95,7 @@ Usage: #{$0} [options]
       def parse(argv)
         super
         option_error("Must specify --database option") if @db_path.nil?
-        options_error("Must specify --terms option") if @terms.empty?
+        option_error("Must specify --terms option") if @terms.empty?
       end
 
       def exec(global_options, argv)
