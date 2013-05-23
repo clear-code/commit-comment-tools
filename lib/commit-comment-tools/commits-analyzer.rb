@@ -59,7 +59,8 @@ module CommitCommentTools
               (a + b).round(2)
             end
           end
-          csv << [range.to_s, *ratio_list, *memo]
+          label = "%d-%d" % [range.first, range.last]
+          csv << [label, *ratio_list, *memo]
         end
         if @all
           over_max_ratio_list = calculate_percentages(commit_groups, ["diff_lines_count > ?", @max_lines])
