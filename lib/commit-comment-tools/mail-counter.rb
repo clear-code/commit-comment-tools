@@ -34,7 +34,7 @@ module CommitCommentTools
     def count
       count_map = {}
       @terms.each do |term|
-        maildir = File.join(@directory, term.label)
+        maildir = File.join(@directory, term.dirname)
         count_map[term.label] = Hash.new(0)
         Dir.glob("#{maildir}/*.eml") do |entry|
           mail = File.read(entry).force_encoding("binary")
