@@ -46,6 +46,10 @@ module CommitCommentTools
       "%s-%s" % [@first.strftime("%m/%d"), @last.strftime("%m/%d")]
     end
 
+    def dirname
+      "%s-%s" % [@first.strftime("%m%d"), @last.strftime("%m%d")]
+    end
+
     def include?(date)
       @range.include?(date)
     end

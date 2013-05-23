@@ -48,7 +48,7 @@ module CommitCommentTools
       threads = []
       @outputdir
       @terms.each do |term|
-        dir = File.join(@outputdir, term.label)
+        dir = File.join(@outputdir, term.dirname)
         FileUtils.mkdir_p(dir)
         threads << Thread.start(term) do |_term|
           ids = imap.search(filter(_term.first, _term.last))
