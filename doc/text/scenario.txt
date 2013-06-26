@@ -88,6 +88,8 @@ http://www.clear-code.com/blog/2012/6/11.html
 
 TODO: 例を追加する
 
+参考: http://www.clear-code.com/blog/2012/3/13.html
+
 よくないコミットの具体例をあげる。
 
 - 複数の変更が入っているコミット
@@ -97,10 +99,37 @@ TODO: 例を追加する
     最近のクリアコードのコミットにはない
   - typo の修正と別の変更が混ざっている
     groonga/groonga@c4139c55: typo の修正と即値ではなく定数を使う修正が混ざっている
+    typo の修正と別の修正が混ざっている別の例
+
+#+BEGIN
+diff --git a/Rakefile b/Rakefile
+index e3e73cf..bfcbe04 100644
+--- a/Rakefile
++++ b/Rakefile
+@@ -292,7 +292,7 @@ namespace :release do
+       empty_options << "OLD_RELEASE_DATE" if old_release_date.nil?
+ 
+       unless empty_options.empty?
+-        raise ArgumentError, "Specify option(s) of #{empty_options.join(",")}."
++        raise ArgumentError, "Specify option(s) of #{empty_options.join(", ")}."
+       end
+ 
+       indexes = ["doc/html/index.html", "doc/html/index.html.ja"]
+@@ -302,7 +302,7 @@ namespace :release do
+          [old_release_date, new_release_date]].each do |old, new|
+           replaced_content = replaced_content.gsub(/#{Regexp.escape(old)}/, new)
+           if /\./ =~ old
+-            old_undnerscore = old.gsub(/\./, '-')
++            old_underscore = old.gsub(/\./, '-')
+             new_underscore = new.gsub(/\./, '-')
+             replaced_content =
+               replaced_content.gsub(/#{Regexp.escape(old_underscore)}/,
+#+END
+
 - コミットログと実際のコミットの内容が違っているコミット
   ranguba/rroonga@477f042: コミットログとコミットの内容が違うコミット
 - コミットログが簡潔すぎてコミットの内容を説明できていないコミット
-  groonga/grnxx@01fbb69: どう改善したのか書かれていないのでわかりづらいコミット
+  groonga/grnxx@01fbb696: どう改善したのか書かれていないのでわかりづらいコミット
 - 周囲のスタイルと違うスタイルで書かれたコードを入れるコミット
   最近のクリアコードのコミットにはない
 
@@ -127,14 +156,20 @@ TODO: 例を追加する
 
 ** コミットメールの読み方とコメントする方法を説明する (15分)
 
-コミットメールの読み方。
+*** コミットメールの読み方
+
+一行ずつ細かく読んでいくのではなく、流し読みでよい。気になったところだ
+けしっかり読む。間違いを探す視点では読まない。
 
 - メールクライアントの通知機能などでコミットメールが届くたびに読む
-- 自分の作業の区切り(例えば、git push したときなど)に届いているコミットメールを読む
+- 自分の作業の区切り(例えば、git push したときなど)に届いているコミット
+  メールを読む
 - 一日の始めか終わりの30分など時間を決めてコミットメールを読む
 - 一日に何度か時間を決めてそのときに届いているコミットメールを読む
 
-コメントの書き方。
+*** コメントの書き方
+
+気楽にコメントする。
 
 - 場所。気になったのはどこかを書く。
 - 理由。なぜ気になったのか。○○だから読みにくい。理由がなければ無いこ
@@ -142,7 +177,9 @@ TODO: 例を追加する
 - 改善案。改善案があるかないか。改善案があればそれを書く、改善案がなけ
   れば無いことを書く。
 
-daily-report の書き方。
+*** daily-report の書き方。
+
+一日の終わりに書く。
 
 - 内容は自由。
 - コミットメールにコメントするほどでもないことを書いたり、コミットメー
