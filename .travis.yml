@@ -4,4 +4,4 @@ rvm:
   - ruby-head
 notifications:
   recipients:
-    - travis@clear-code.com
+    - commit@clear-code.com
