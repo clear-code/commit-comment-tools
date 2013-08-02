@@ -31,7 +31,7 @@ See also [clear-code/daily-report-sample](https://github.com/clear-code/daily-re
 This tool has many options, so you can use Rake.
 
 1. Create daily-report repository
-** See [clear-code/daily-report-sample](https://github.com/clear-code/daily-report-sample).
+  * See [clear-code/daily-report-sample](https://github.com/clear-code/daily-report-sample).
 2. Write and commit daily reports
 3. Develop your project
 4. Load commits from your repositories
