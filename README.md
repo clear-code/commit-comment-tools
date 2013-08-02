@@ -10,6 +10,22 @@ commit-comment-tools
 Commit-comment-tools is the tools for
 [commit-comment-service](http://www.clear-code.com/services/commit-comment.html).
 
+## Install
+
+````
+$ gem install commit-comment-tools
+````
+
+You can also use bunlder.
+
+Gemfile:
+````
+source: "https://rubygems.org"
+gem: "commit-comment-tools"
+````
+
+See also [clear-code/daily-report-sample](https://githuc.com/clear-code/daily-report-sample)
+
 ## Usage
 
 ````
