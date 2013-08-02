@@ -167,7 +167,15 @@ http://www.clear-code.com/blog/2012/6/11.html
 - rabbit
 - 実際にサービスを導入するプロジェクト
 
-チェックアウトしたコードではなく、コミット(差分)を読んだ方がいいかもしれない。
+# NOTE: チェックアウトしたコードではなく、コミット(差分)を読んだ方がいいかもしれない。
+
+たぶん、以下でそれっぽいメールを送ることができるけど、フォーマットがgit-utilsで送るコミットメールと異なる。
+
+#+BEGIN_EXAMPLE
+$ git format-patch -o ./patch HEAD~10..
+$ git send-email --to foo@example.com \
+                 --no-chain-reply-to --no-thread ./patch/*
+#+END_EXAMPLE
 
 ** 感想を聞く (2分x人数)
 
