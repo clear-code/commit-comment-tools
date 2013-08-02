@@ -24,7 +24,7 @@ source: "https://rubygems.org"
 gem: "commit-comment-tools"
 ````
 
-See also [clear-code/daily-report-sample](https://githuc.com/clear-code/daily-report-sample)
+See also [clear-code/daily-report-sample](https://github.com/clear-code/daily-report-sample)
 
 ## Usage
 
