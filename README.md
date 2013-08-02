@@ -40,15 +40,15 @@ $ cct load-commits -d /path/to/commits.db -r /path/to/your/project -b master
 ````
 5. Analyze your repositories
 ````
-$ cct analyze-commits -d /path/to/commits.db \ 
-                      --terms=2013-03-01:2013-03-31:13,2013-04-01:2013-04-30:23 \ 
+$ cct analyze-commits -d /path/to/commits.db
+                      --terms=2013-03-01:2013-03-31:13,2013-04-01:2013-04-30:23
                       -o output.csv
 ````
 6. Analyze your daily reports
 ````
-$ cct analyze-reports /path/to/daily-report \ 
-                      --members=taro,jiro,saburo \ 
-                      --terms=2013-03-01:2013-03-31:13,2013-04-01:2013-04-30:23 \ 
+$ cct analyze-reports /path/to/daily-report
+                      --members=taro,jiro,saburo
+                      --terms=2013-03-01:2013-03-31:13,2013-04-01:2013-04-30:23
                       -o dayly-report.csv
 ````
 
