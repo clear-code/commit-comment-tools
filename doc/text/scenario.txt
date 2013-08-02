@@ -86,8 +86,6 @@ http://www.clear-code.com/blog/2012/6/11.html
 
 ** よいコミットとよくないコミットの説明 (15分)
 
-TODO: 例を追加する
-
 参考: http://www.clear-code.com/blog/2012/3/13.html
 
 よくないコミットの具体例をあげる。
