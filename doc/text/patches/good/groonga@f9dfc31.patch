@@ -1,3 +1,6 @@
+よいコミットログの書き方をしているコミット
+コンパイラの警告を消すコミットで警告メッセージもコミットログに書いてあるコミット
+
 commit f9dfc311dfa67f5bc44bc7f0ac6acaeb770d8e48
 Author: Kouhei Sutou <kou@clear-code.com>
 Date:   Tue Jun 11 17:56:12 2013 +0900

@@ -1,3 +1,6 @@
+変数名の変更とスタイルの変更が混ざっている。
+モジュール名の変更とインデントの変更が混ざっている。
+
 commit 78f59798771e40ac75ba2e2fd34c761603bb7237
 Author: okkez <okkez000@gmail.com>
 Date:   Sun Dec 18 02:01:08 2011 +0000

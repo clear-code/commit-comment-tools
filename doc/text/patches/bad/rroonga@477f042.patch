@@ -1,3 +1,6 @@
+コミットログと実際のコミットの内容が違っているコミット
+実際には"BUT"をやめたのにコミットログには"NOT"をやめたと書いてある
+
 commit 477f0425602d4613fdf8370ab2be4716b7cce5a5
 Author: Kouhei Sutou <kou@clear-code.com>
 Date:   Wed Jun 12 17:43:40 2013 +0900

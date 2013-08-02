@@ -1,3 +1,6 @@
+よいコミットログの書き方をしているコミット
+おかしな挙動(バグ)の修正をしたコミットで、修正前後の違いがコミットログに書かれているコミット
+
 commit 8ae527a3766c1cc795685dcca5c4f3970492407d
 Author: Haruka Yoshihara <yoshihara@clear-code.com>
 Date:   Wed Feb 6 18:38:01 2013 +0900

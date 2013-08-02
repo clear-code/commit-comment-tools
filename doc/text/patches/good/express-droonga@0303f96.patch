@@ -1,3 +1,6 @@
+一つのコミットで一つの変更をしているコミット
+タイポの修正だけのコミット
+
 commit 0303f96acdabc866786a6261ef3bc307b250b16c
 Author: YUKI Hiroshi <shimoda@clear-code.com>
 Date:   Thu Feb 7 16:49:41 2013 +0900

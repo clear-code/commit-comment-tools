@@ -1,3 +1,6 @@
+一つのコミットで一つの変更をしているコミット
+追加したメソッドを使うようにするだけのコミット
+
 commit 3f4cd4a3f511532cdd8708ba535e22fe8d25a144
 Author: Kenji Okimoto <okimoto@clear-code.com>
 Date:   Fri Dec 21 14:55:34 2012 +0900

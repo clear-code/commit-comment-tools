@@ -1,3 +1,6 @@
+よいコミットログの書き方をしているコミット
+タイポの修正で変更点を縦に並べるコミット
+
 commit 047bdadd40bb8b6082cdd7d1d21153f05b9b108d
 Author: Kouhei Sutou <kou@clear-code.com>
 Date:   Fri May 24 17:44:43 2013 +0900

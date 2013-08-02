@@ -1,3 +1,6 @@
+一つのコミットで一つの変更をしているコミット
+メソッドの追加だけのコミット
+
 commit 2a2168938e0a41aa93ec152882afb6b4bd15ef62
 Author: Kenji Okimoto <okimoto@clear-code.com>
 Date:   Fri Dec 21 14:55:18 2012 +0900

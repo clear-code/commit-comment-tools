@@ -1,3 +1,6 @@
+一つのコミットで一つの変更をしているコミット
+高速化をしたコミットで、前後の計測結果がコミットログに書かれているコミット
+
 commit f56f466a05d756336f26ea5c2e54e9bdf5d3d681
 Author: Kouhei Sutou <kou@clear-code.com>
 Date:   Fri Nov 18 01:05:21 2011 +0900

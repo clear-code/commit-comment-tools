@@ -1,3 +1,6 @@
+typo の修正と別の変更が混ざっている
+typo の修正と即値ではなく定数を使う修正が混ざっている
+
 commit c4139c550422f9ff6aa0a4bdddeadf39d0ab66a6
 Author: HAYASHI Kentaro <hayashi@clear-code.com>
 Date:   Mon May 21 10:54:34 2012 +0900
