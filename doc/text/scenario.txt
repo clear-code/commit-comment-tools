@@ -99,34 +99,9 @@ TODO: 例を追加する
   - typo の修正と別の変更が混ざっている
     groonga/groonga@c4139c55: typo の修正と即値ではなく定数を使う修正が混ざっている
     typo の修正と別の修正が混ざっている別の例
-
-#+BEGIN
-diff --git a/Rakefile b/Rakefile
-index e3e73cf..bfcbe04 100644
---- a/Rakefile
-+++ b/Rakefile
-@@ -292,7 +292,7 @@ namespace :release do
-       empty_options << "OLD_RELEASE_DATE" if old_release_date.nil?
- 
-       unless empty_options.empty?
--        raise ArgumentError, "Specify option(s) of #{empty_options.join(",")}."
-+        raise ArgumentError, "Specify option(s) of #{empty_options.join(", ")}."
-       end
- 
-       indexes = ["doc/html/index.html", "doc/html/index.html.ja"]
-@@ -302,7 +302,7 @@ namespace :release do
-          [old_release_date, new_release_date]].each do |old, new|
-           replaced_content = replaced_content.gsub(/#{Regexp.escape(old)}/, new)
-           if /\./ =~ old
--            old_undnerscore = old.gsub(/\./, '-')
-+            old_underscore = old.gsub(/\./, '-')
-             new_underscore = new.gsub(/\./, '-')
-             replaced_content =
-               replaced_content.gsub(/#{Regexp.escape(old_underscore)}/,
-#+END
-
 - コミットログと実際のコミットの内容が違っているコミット
   ranguba/rroonga@477f042: コミットログとコミットの内容が違うコミット
+  実際には"BUT"をやめたのにコミットログには"NOT"をやめたと書いてある
 - コミットログが簡潔すぎてコミットの内容を説明できていないコミット
   groonga/grnxx@01fbb696: どう改善したのか書かれていないのでわかりづらいコミット
 - 周囲のスタイルと違うスタイルで書かれたコードを入れるコミット
@@ -138,17 +113,20 @@ index e3e73cf..bfcbe04 100644
   - スタイルの変更だけのコミット
     groonga/groonga@d9997aa
   - タイポの修正だけのコミット
-    groonga/express-droonga@ecfbbfb
+    groonga/express-droonga@0303f96
   - メソッドの追加だけのコミット
+    test-unit/test-unit@2a21689
   - 追加したメソッドを使うようにするだけのコミット
+    test-unit/test-unit@3f4cd4a
 - よいコミットログの書き方をしているコミット
   - タイポの修正で変更点を縦に並べるコミット
     groonga/groonga-query-log@047bdad
   - コンパイラの警告を消すコミットで警告メッセージもコミットログに書いてあるコミット
     groonga/groonga@f9dfc31: groonga の gcc, clang 対応の一連のコミット
   - 高速化をしたコミットで、前後の計測結果がコミットログに書かれているコミット
+    groonga/groonga@f56f466
   - おかしな挙動(バグ)の修正をしたコミットで、修正前後の違いがコミットログに書かれているコミット
-    clear-code/commit-comment-tools@8ae527a3:
+    clear-code/commit-comment-tools@8ae527a3
   - ある決定をしたコミットで、その背景や理由までコミットログに書かれているコミット
 
 ** 質問タイム2 (5分)
