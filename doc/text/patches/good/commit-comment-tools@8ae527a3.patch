@@ -1,0 +1,229 @@
+commit 8ae527a3766c1cc795685dcca5c4f3970492407d
+Author: Haruka Yoshihara <yoshihara@clear-code.com>
+Date:   Wed Feb 6 18:38:01 2013 +0900
+
+    Split process to parsing report files and generating daily reports from entries
+    
+    e.g.)
+      A report file content (2 entries):
+    2013-01-30:100%:Read all commit.
+    2013-02-01:40%:There were many typo commit.
+    
+    By parsing:
+      Before: report file
+      After : entries (Array) like below:
+        [
+          {
+            :date       => "2013-01-30",
+            :read_ratio => "100",
+            :comment    => "Read all commit."
+          },
+          {
+            :date       => "2013-02-01",
+            :read_ratio => "40",
+            :comment    => "There were many typo commit."
+          }
+        ]
+    
+    By generating:
+      Before: entries like above:
+      After : daily report (Hash) like below:
+        {
+          "2013-01-30" => {
+            :read_ratio => "100",
+            :comment    => "Read all commit."
+          },
+          "2013-02-01" => {
+            :read_ratio => "40",
+            :comment    => "There were many typo commit."
+          }
+        }
+
+diff --git a/lib/commit-comment-tools/report-parser.rb b/lib/commit-comment-tools/report-parser.rb
+index 5dc4712..4b2b9e9 100755
+--- a/lib/commit-comment-tools/report-parser.rb
++++ b/lib/commit-comment-tools/report-parser.rb
+@@ -24,35 +24,42 @@ module CommitCommentTools
+         report_directory ||= "."
+         report_files = Dir.glob(File.join(report_directory, "**", "*.txt"))
+ 
+-        self.new.parse_files(report_files)
++        self.new.parse(report_files)
+       end
+     end
+ 
+     def initialize
+-      @parsed_reports = {}
++      @person_reports = {}
+     end
+ 
+-    def parse_files(report_files)
++    def parse(report_files)
+       report_files.each do |report_file|
+-        name = File.basename(report_file, ".txt")
+-        File.open(report_file, "r") do |report|
+-          parse_stream(name, report)
+-        end
++        person_name = File.basename(report_file, ".txt")
++
++        daily_entries = parse_file(report_file)
++        @person_reports[person_name] = generate_person_report(daily_entries)
++      end
++
++      @person_reports
++    end
++
++    def parse_file(report_file)
++      File.open(report_file, "r") do |report_io|
++        parse_stream(report_io)
+       end
+-      @parsed_reports
+     end
+ 
+-    def parse_stream(name, report)
+-      @parsed_reports[name] = {}
++    def parse_stream(report_io)
++      entries = []
+       date = ""
+       read_ratio = ""
+       comment = ""
+ 
+-      report.each_line.with_index do |line, line_number|
++      report_io.each_line.with_index do |line, line_number|
+         case line.chomp
+         when /\A(\d\d\d\d-\d+-\d+):(\d+)%:(.*)\z/
+           unless line_number.zero?
+-            store(name, date, read_ratio, comment)
++            entries << entry(date, read_ratio, comment)
+           end
+ 
+           date = $1
+@@ -64,10 +71,27 @@ module CommitCommentTools
+       end
+ 
+       unless comment.empty?
+-        store(name, date, read_ratio, comment)
++        entries << entry(date, read_ratio, comment)
+       end
++      entries
++    end
++
++    def entry(date, read_ratio, comment)
++      {
++        :date       => date,
++        :read_ratio => read_ratio,
++        :comment    => comment.chomp
++      }
++    end
+ 
+-      @parsed_reports
++    def generate_daily_report(entries)
++      daily_report = {}
++
++      entries.each do |entry|
++        date = entry.delete(:date)
++        daily_report[date] = entry
++      end
++      daily_report
+     end
+ 
+     def store(name, date, read_ratio, comment)
+diff --git a/test/test-report-parser.rb b/test/test-report-parser.rb
+index ea955ba..c2eb90b 100644
+--- a/test/test-report-parser.rb
++++ b/test/test-report-parser.rb
+@@ -24,53 +24,65 @@ class ReportParserTest < Test::Unit::TestCase
+   end
+ 
+   def test_oneline
+-    report = StringIO.new(<<-REPORT)
++    report_io = StringIO.new(<<-REPORT)
+ 2013-1-30:40%:特になし
+ 2013-2-1:80%:typoが多かった
+ REPORT
+ 
+-    actual_parsed_report = @parser.parse_stream("yamada", report)
+-    expected_parsed_report = {
+-      "yamada" => {
+-        "2013-1-30" => {:read_ratio => "40", :comment => "特になし"},
+-        "2013-2-1" => {:read_ratio => "80", :comment => "typoが多かった"},
+-      }
+-    }
+-    assert_equal(expected_parsed_report, actual_parsed_report)
++    actual_entries = @parser.parse_stream(report_io)
++    expected_entries = [
++      {:date => "2013-1-30", :read_ratio => "40", :comment => "特になし"},
++      {:date => "2013-2-1",  :read_ratio => "80", :comment => "typoが多かった"},
++    ]
++    assert_equal(expected_entries, actual_entries)
+   end
+ 
+   def test_continues_lines
+-    report = StringIO.new(<<-REPORT)
++    report_io = StringIO.new(<<-REPORT)
+ 2013-2-1:80%:typoが多かった
+ 2013-2-2:50%:
+   PHPのコードを久しぶりに書いた
+   データ駆動を使ってテストがどんどん書き直されていた
+ REPORT
+ 
+-    actual_parsed_report = @parser.parse_stream("yamada", report)
+-    expected_continues_comment = "PHPのコードを久しぶりに書いた\n" +
+-                                   "データ駆動を使ってテストがどんどん書き直されていた"
+-    expected_parsed_report = {
+-      "yamada" => {
+-        "2013-2-1" => {:read_ratio => "80", :comment => "typoが多かった"},
+-        "2013-2-2" => {
+-          :read_ratio => "50",
+-          :comment => expected_continues_comment
+-        },
+-      }
+-    }
+-    assert_equal(expected_parsed_report, actual_parsed_report)
++    actual_entries = @parser.parse_stream(report_io)
++    continues_comment = "PHPのコードを久しぶりに書いた\n" +
++                          "データ駆動を使ってテストがどんどん書き直されていた"
++    expected_entries = [
++      {:date => "2013-2-1", :read_ratio => "80", :comment => "typoが多かった"},
++      {:date => "2013-2-2", :read_ratio => "50", :comment => continues_comment},
++    ]
++    assert_equal(expected_entries, actual_entries)
+   end
+ 
+   def test_zero_padding_date
+-    report = StringIO.new("2013-01-30:40%:特になし")
++    report_io = StringIO.new("2013-01-30:40%:特になし")
+ 
+-    actual_parsed_report = @parser.parse_stream("yamada", report)
+-    expected_parsed_report = {
+-      "yamada" => {
+-        "2013-01-30" => {:read_ratio => "40", :comment => "特になし"},
++    actual_entries = @parser.parse_stream(report_io)
++    expected_entries = [
++      {:date => "2013-01-30", :read_ratio => "40", :comment => "特になし"},
++    ]
++    assert_equal(expected_entries, actual_entries)
++  end
++
++  def test_generate_daily_report
++    entries = [
++      {:date => "2013-1-30", :read_ratio => "40", :comment => "特になし"},
++      {:date => "2013-2-1",  :read_ratio => "80", :comment => "typoが多かった"},
++    ]
++
++    actual_daily_report = @parser.generate_daily_report(entries)
++    expected_daily_report = {
++      "2013-1-30" => {
++        :read_ratio => "40",
++        :comment    => "特になし"
++      },
++      "2013-2-1" => {
++        :read_ratio => "80",
++        :comment    => "typoが多かった"
+       }
+     }
+-    assert_equal(expected_parsed_report, actual_parsed_report)
++
++    assert_equal(expected_daily_report, actual_daily_report)
+   end
+ end

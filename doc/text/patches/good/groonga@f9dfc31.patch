@@ -1,0 +1,35 @@
+commit f9dfc311dfa67f5bc44bc7f0ac6acaeb770d8e48
+Author: Kouhei Sutou <kou@clear-code.com>
+Date:   Tue Jun 11 17:56:12 2013 +0900
+
+    clang: suppress a warning
+    
+    Set missing default value.
+    
+        tsv.c:105:16: warning: variable 'encoding' is used uninitialized whenever 'if'
+              condition is false [-Wsometimes-uninitialized]
+            } else if (strncasecmp(encoding_name, "KOI8-R", strlen("KOI8-R")) == 0 ||
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        tsv.c:114:10: note: uninitialized use occurs here
+          return encoding;
+                 ^~~~~~~~
+        tsv.c:105:12: note: remove the 'if' if its condition is always true
+            } else if (strncasecmp(encoding_name, "KOI8-R", strlen("KOI8-R")) == 0 ||
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        tsv.c:79:3: note: variable 'encoding' is declared here
+          grn_encoding encoding;
+          ^
+
+diff --git a/plugins/query_expanders/tsv.c b/plugins/query_expanders/tsv.c
+index 25fbf63..5d521eb 100644
+--- a/plugins/query_expanders/tsv.c
++++ b/plugins/query_expanders/tsv.c
+@@ -76,7 +76,7 @@ is_comment_mark(char character)
+ static inline grn_encoding
+ detect_coding_part(grn_ctx *ctx, const char *line, size_t line_length)
+ {
+-  grn_encoding encoding;
++  grn_encoding encoding = GRN_ENC_NONE;
+   grn_obj null_terminated_line_buffer;
+   const char *c_line;
+   const char *coding_part_keyword = "coding: ";

@@ -1,0 +1,23 @@
+commit 047bdadd40bb8b6082cdd7d1d21153f05b9b108d
+Author: Kouhei Sutou <kou@clear-code.com>
+Date:   Fri May 24 17:44:43 2013 +0900
+
+    Fix a typo...
+    
+    @queie ->
+    @queue
+        ^
+
+diff --git a/lib/groonga/query-log/replayer.rb b/lib/groonga/query-log/replayer.rb
+index 6205523..dedd4a8 100644
+--- a/lib/groonga/query-log/replayer.rb
++++ b/lib/groonga/query-log/replayer.rb
+@@ -60,7 +60,7 @@ module Groonga
+             id += 1
+           end
+           @n_clients.times do
+-            @queie.push(nil)
++            @queue.push(nil)
+           end
+         end
+       end

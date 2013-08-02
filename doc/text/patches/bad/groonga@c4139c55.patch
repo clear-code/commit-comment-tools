@@ -1,0 +1,46 @@
+commit c4139c550422f9ff6aa0a4bdddeadf39d0ab66a6
+Author: HAYASHI Kentaro <hayashi@clear-code.com>
+Date:   Mon May 21 10:54:34 2012 +0900
+
+    test: fix typo
+
+diff --git a/test/function/tools/geo/generate-grntest-data.rb b/test/function/tools/geo/generate-grntest-data.rb
+index c04a6ce..03d6563 100755
+--- a/test/function/tools/geo/generate-grntest-data.rb
++++ b/test/function/tools/geo/generate-grntest-data.rb
+@@ -334,7 +334,7 @@ class GrnTestData
+       179 => "almost_180_degrees",
+       91 => "almost_90_degrees_larger",
+       90 => "on_90_degrees",
+-      89 => "almost_90_degrees_smaler",
++      89 => "almost_90_degrees_smaller",
+       1 => "almost_0_degree_larger",
+       0 => "on_0_degree",
+       -1 => "almost_0_degree_smaller",
+@@ -356,7 +356,7 @@ class GrnTestData
+   def latitude_position
+     latitude_desc = {
+       90 => "on_90_degrees",
+-      89 => "almost_90_degrees_smaler",
++      89 => "almost_90_degrees_smaller",
+       1 => "almost_0_degree_larger",
+       0 => "on_0_degree",
+       -1 => "almost_0_degree_smaller",
+@@ -541,7 +541,7 @@ if __FILE__ == $0
+             direction,
+             longitude_position,
+             filename
+-          ].join("/")
++          ].join(File::SEPARATOR)
+           puts(path)
+         else
+           path = [
+@@ -550,7 +550,7 @@ if __FILE__ == $0
+             type,
+             longitude_position,
+             filename
+-          ].join("/")
++          ].join(File::SEPARATOR)
+           puts(path)
+         end
+       elsif OPTS.has_key?(:csv_data)

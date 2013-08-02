@@ -1,0 +1,20 @@
+commit 2a2168938e0a41aa93ec152882afb6b4bd15ef62
+Author: Kenji Okimoto <okimoto@clear-code.com>
+Date:   Fri Dec 21 14:55:18 2012 +0900
+
+    Add fixture_file_path
+
+diff --git a/test/testunit-test-util.rb b/test/testunit-test-util.rb
+index 991ce5b..306ee39 100644
+--- a/test/testunit-test-util.rb
++++ b/test/testunit-test-util.rb
+@@ -23,4 +23,9 @@ module TestUnitTestUtil
+     test.run(result) {}
+     result
+   end
++
++  def fixture_file_path(file_name)
++    base_dir = File.dirname(__FILE__)
++    File.join(base_dir, "fixtures", file_name)
++  end
+ end

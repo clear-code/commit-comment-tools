@@ -1,0 +1,84 @@
+commit 3f4cd4a3f511532cdd8708ba535e22fe8d25a144
+Author: Kenji Okimoto <okimoto@clear-code.com>
+Date:   Fri Dec 21 14:55:34 2012 +0900
+
+    Use fixture_file_path
+
+diff --git a/test/test-data.rb b/test/test-data.rb
+index c41a1f3..e0f67dc 100644
+--- a/test/test-data.rb
++++ b/test/test-data.rb
+@@ -1,3 +1,5 @@
++require "testunit-test-util"
++
+ class TestData < Test::Unit::TestCase
+   class Calc
+     def initialize
+@@ -206,6 +208,7 @@ class TestData < Test::Unit::TestCase
+   end
+ 
+   class TestLoadData < Test::Unit::TestCase
++    include TestUnitTestUtil
+     def test_invalid_csv_file_name
+       garbage = "X"
+       file_name = "data.csv#{garbage}"
+@@ -221,8 +224,7 @@ class TestData < Test::Unit::TestCase
+ 
+       class TestHeader < self
+         def test_normal
+-          base_dir = File.dirname(__FILE__)
+-          file_name = File.join(base_dir, "fixtures", "header.csv")
++          file_name = fixture_file_path("header.csv")
+           self.class.load_data(file_name)
+           assert_equal([
+                          {
+@@ -242,8 +244,7 @@ class TestData < Test::Unit::TestCase
+         end
+ 
+         def test_label
+-          base_dir = File.dirname(__FILE__)
+-          file_name = File.join(base_dir, "fixtures", "header-label.csv")
++          file_name = fixture_file_path("header-label.csv")
+           self.class.load_data(file_name)
+           assert_equal([
+                          {
+@@ -264,8 +265,7 @@ class TestData < Test::Unit::TestCase
+       end
+ 
+       def test_without_header
+-        base_dir = File.dirname(__FILE__)
+-        file_name = File.join(base_dir, "fixtures", "no-header.csv")
++        file_name = fixture_file_path("no-header.csv")
+         self.class.load_data(file_name)
+         assert_equal([
+                        {"empty string" => [true, ""]},
+@@ -282,8 +282,7 @@ class TestData < Test::Unit::TestCase
+ 
+       class TestHeader < self
+         def test_normal
+-          base_dir = File.dirname(__FILE__)
+-          file_name = File.join(base_dir, "fixtures", "header.tsv")
++          file_name = fixture_file_path("header.tsv")
+           self.class.load_data(file_name)
+           assert_equal([
+                          {
+@@ -303,8 +302,7 @@ class TestData < Test::Unit::TestCase
+         end
+ 
+         def test_label
+-          base_dir = File.dirname(__FILE__)
+-          file_name = File.join(base_dir, "fixtures", "header-label.tsv")
++          file_name = fixture_file_path("header-label.tsv")
+           self.class.load_data(file_name)
+           assert_equal([
+                          {
+@@ -325,8 +323,7 @@ class TestData < Test::Unit::TestCase
+       end
+ 
+       def test_without_header
+-        base_dir = File.dirname(__FILE__)
+-        file_name = File.join(base_dir, "fixtures", "no-header.tsv")
++        file_name = fixture_file_path("no-header.tsv")
+         self.class.load_data(file_name)
+         assert_equal([
+                        {"empty string" => [true, ""]},
