@@ -1,0 +1,409 @@
+hatohol@f47d879との対比。
+こちらは、一つの変更しかしておらず、変更内容もわかりやすい。
+また、名前の変更を複数実施しているがそれぞれの変更の間に空行が入っておりわかりやすくなっている。
+
+commit 5ecee1728535061a637089ac90064795624a1779
+Author: Takuro Ashie <ashie@clear-code.com>
+Date:   Fri Aug 2 11:17:06 2013 +0900
+
+    Fix deprecated function names
+    
+        setup() ->
+    cut_setup()
+    
+        teardown ->
+    cut_teardown
+
+diff --git a/server/mlpl/test/testLogger.cc b/server/mlpl/test/testLogger.cc
+index 917c862..9d0491f 100644
+--- a/server/mlpl/test/testLogger.cc
++++ b/server/mlpl/test/testLogger.cc
+@@ -100,7 +100,7 @@ static void _assertLogOutput(const char *envLevel, const char *outLevel,
+ }
+ #define assertLogOutput(EL,OL,EXP) cut_trace(_assertLogOutput(EL,OL,EXP))
+ 
+-void teardown(void)
++void cut_teardown(void)
+ {
+ 	if (g_standardOutput) {
+ 		g_free(g_standardOutput);
+diff --git a/server/test/testArmNagiosNDOUtils.cc b/server/test/testArmNagiosNDOUtils.cc
+index ff55949..5c39460 100644
+--- a/server/test/testArmNagiosNDOUtils.cc
++++ b/server/test/testArmNagiosNDOUtils.cc
+@@ -72,12 +72,12 @@ static void createGlobalInstance(void)
+ 	g_armNagiTestee = dynamic_cast<ArmNagiosNDOUtilsTestee *>(g_armNagi);
+ }
+ 
+-void setup(void)
++void cut_setup(void)
+ {
+ 	hatoholInit();
+ }
+ 
+-void teardown(void)
++void cut_teardown(void)
+ {
+ 	if (g_armNagi) {
+ 		delete g_armNagi;
+diff --git a/server/test/testArmZabbixAPI.cc b/server/test/testArmZabbixAPI.cc
+index 9f7594a..23a1074 100644
+--- a/server/test/testArmZabbixAPI.cc
++++ b/server/test/testArmZabbixAPI.cc
+@@ -364,7 +364,7 @@ static void _assertTestGet(ArmZabbixAPITestee::GetTestType testType)
+ }
+ #define assertTestGet(TYPE) cut_trace(_assertTestGet(TYPE))
+ 
+-void setup(void)
++void cut_setup(void)
+ {
+ 	cppcut_assert_equal(false, g_sync.isLocked(),
+ 	                    cut_message("g_sync is locked."));
+@@ -378,7 +378,7 @@ void setup(void)
+ 	deleteDBClientDB(DB_DOMAIN_ID_HATOHOL);
+ }
+ 
+-void teardown(void)
++void cut_teardown(void)
+ {
+ 	g_sync.reset();
+ 	g_apiEmulator.reset();
+diff --git a/server/test/testDBAgentMySQL.cc b/server/test/testDBAgentMySQL.cc
+index d96d256..b5fbd50 100644
+--- a/server/test/testDBAgentMySQL.cc
++++ b/server/test/testDBAgentMySQL.cc
+@@ -235,13 +235,13 @@ void _assertIsRecordExisting(bool skipInsert)
+ }
+ #define assertIsRecordExisting(SI) cut_trace(_assertIsRecordExisting(SI))
+ 
+-void setup(void)
++void cut_setup(void)
+ {
+ 	bool recreate = true;
+ 	makeTestMySQLDBIfNeeded(TEST_DB_NAME, recreate);
+ }
+ 
+-void teardown(void)
++void cut_teardown(void)
+ {
+ 	if (g_dbAgent) {
+ 		delete g_dbAgent;
+diff --git a/server/test/testDBAgentSQLite3.cc b/server/test/testDBAgentSQLite3.cc
+index 4bfd829..f51c09e 100644
+--- a/server/test/testDBAgentSQLite3.cc
++++ b/server/test/testDBAgentSQLite3.cc
+@@ -179,7 +179,7 @@ string _path = getFixturesDir() + DB_NAME; \
+ DBAgentSQLite3::defineDBPath(DEFAULT_DB_DOMAIN_ID, _path); \
+ DBAgentSQLite3 OBJ_NAME; \
+ 
+-void setup(void)
++void cut_setup(void)
+ {
+ 	deleteDB();
+ 	DBAgentSQLite3::defineDBPath(DEFAULT_DB_DOMAIN_ID, g_dbPath);
+diff --git a/server/test/testDBClientConfig.cc b/server/test/testDBClientConfig.cc
+index ccb9515..199c633 100644
+--- a/server/test/testDBClientConfig.cc
++++ b/server/test/testDBClientConfig.cc
+@@ -66,7 +66,7 @@ static string makeExpectedOutput(MonitoringServerInfo *serverInfo)
+ 	return expectedOut;
+ }
+ 
+-void setup(void)
++void cut_setup(void)
+ {
+ 	hatoholInit();
+ 	
+diff --git a/server/test/testDBClientHatohol.cc b/server/test/testDBClientHatohol.cc
+index 11e5dd5..43dfb05 100644
+--- a/server/test/testDBClientHatohol.cc
++++ b/server/test/testDBClientHatohol.cc
+@@ -233,7 +233,7 @@ void _assertGetNumberOfHostsWithStatus(bool status)
+ #define assertGetNumberOfHostsWithStatus(ST) \
+ cut_trace(_assertGetNumberOfHostsWithStatus(ST))
+ 
+-void setup(void)
++void cut_setup(void)
+ {
+ 	hatoholInit();
+ 	deleteDBClientDB(DB_DOMAIN_ID_HATOHOL);
+diff --git a/server/test/testDBClientZabbix.cc b/server/test/testDBClientZabbix.cc
+index 0d4022a..aacf058 100644
+--- a/server/test/testDBClientZabbix.cc
++++ b/server/test/testDBClientZabbix.cc
+@@ -201,7 +201,7 @@ void _assertAddApplicationsRaw2_0(bool writeTwice = false)
+ #define assertAddApplicationsRaw2_0(...) \
+ cut_trace(_assertAddApplicationsRaw2_0(__VA_ARGS__))
+ 
+-void setup(void)
++void cut_setup(void)
+ {
+ 	hatoholInit();
+ }
+diff --git a/server/test/testFaceRest.cc b/server/test/testFaceRest.cc
+index 870ca56..348d084 100644
+--- a/server/test/testFaceRest.cc
++++ b/server/test/testFaceRest.cc
+@@ -306,13 +306,13 @@ static void _assertItems(const string &path, const string &callbackName = "")
+ }
+ #define assertItems(P,...) cut_trace(_assertItems(P,##__VA_ARGS__))
+ 
+-void setup(void)
++void cut_setup(void)
+ {
+ 	hatoholInit();
+ 	setupTestDBServers();
+ }
+ 
+-void teardown(void)
++void cut_teardown(void)
+ {
+ 	if (g_faceRest) {
+ 		try {
+diff --git a/server/test/testFormulaElement.cc b/server/test/testFormulaElement.cc
+index e1dc726..5f6d97c 100644
+--- a/server/test/testFormulaElement.cc
++++ b/server/test/testFormulaElement.cc
+@@ -79,7 +79,7 @@ public:
+ 	}
+ };
+ 
+-void teardown()
++void cut_teardown()
+ {
+ 	for (int i = 0; i < NUM_ELEM_POOL; i++) {
+ 		if (g_elem[i]) {
+@@ -161,7 +161,7 @@ void test_findInsertPoint(void)
+ 	TestFormulaElement      *elemPrioH = new TestFormulaElement();
+ 	TestFormulaElementPrio0 *elemPrioM = new TestFormulaElementPrio0();
+ 	TestFormulaElementPrio1 *elemPrioL = new TestFormulaElementPrio1();
+-	x_elem = elemPrioL; // to free the tree in teardown()
++	x_elem = elemPrioL; // to free the tree in cut_teardown()
+ 
+ 	elemPrioL->setLeftHand(elemPrioM);
+ 	elemPrioM->setRightHand(elemPrioH);
+@@ -194,8 +194,8 @@ void test_findInsertPointInsertMid(void)
+ 	TestFormulaElement      *elemPrioH  = new TestFormulaElement();
+ 	TestFormulaElementPrio0 *elemPrioM  = new TestFormulaElementPrio0();
+ 	TestFormulaElementPrio1 *elemPrioL  = new TestFormulaElementPrio1();
+-	x_elem = elemPrioL; // to free the tree in teardown()
+-	y_elem = elemPrioM; // to free the tree in teardown()
++	x_elem = elemPrioL; // to free the tree in cut_teardown()
++	y_elem = elemPrioM; // to free the tree in cut_teardown()
+ 
+ 	elemPrioL->setLeftHand(elemPrioH);
+ 	elemPrioH->setLeftHand(elemPrioH2);
+diff --git a/server/test/testFormulaOperator.cc b/server/test/testFormulaOperator.cc
+index 79fdd51..5e018b7 100644
+--- a/server/test/testFormulaOperator.cc
++++ b/server/test/testFormulaOperator.cc
+@@ -84,7 +84,7 @@ void _assertFormulaComparatorEqualVal(int v0, int v1)
+ #define assertFormulaComparatorEqualVal(V0, V1) \
+ cut_trace(_assertFormulaComparatorEqualVal(V0, V1))
+ 
+-void teardown()
++void cut_teardown()
+ {
+ 	for (int i = 0; i < NUM_ELEM_POOL; i++) {
+ 		if (g_elem[i]) {
+diff --git a/server/test/testHatoholThreadBase.cc b/server/test/testHatoholThreadBase.cc
+index 5ff4ee7..ea9174c 100644
+--- a/server/test/testHatoholThreadBase.cc
++++ b/server/test/testHatoholThreadBase.cc
+@@ -80,7 +80,7 @@ private:
+ 	void    *m_testData;
+ };
+ 
+-void setup(void)
++void cut_setup(void)
+ {
+ 	if (!sync.trylock())
+ 		cut_fail("lock is not unlocked.");
+diff --git a/server/test/testItemData.cc b/server/test/testItemData.cc
+index 868642e..b76e8cf 100644
+--- a/server/test/testItemData.cc
++++ b/server/test/testItemData.cc
+@@ -115,7 +115,7 @@ void assertOperatorPlus(T &v0, T &v1)
+ 	cppcut_assert_equal(v0 + v1, item->get());
+ }
+ 
+-void teardown(void)
++void cut_teardown(void)
+ {
+ 	for (int i = 0; i < NUM_ITEM_POOL; i++) {
+ 		if (g_item[i]) {
+diff --git a/server/test/testItemGroup.cc b/server/test/testItemGroup.cc
+index 6657612..7dd1195 100644
+--- a/server/test/testItemGroup.cc
++++ b/server/test/testItemGroup.cc
+@@ -46,7 +46,7 @@ static ItemGroup *g_grp[NUM_GROUP_POOL];
+ static ItemGroup *&x_grp = g_grp[0];
+ static ItemGroup *&y_grp = g_grp[1];
+ 
+-void teardown()
++void cut_teardown()
+ {
+ 	for (int i = 0; i < NUM_GROUP_POOL; i++) {
+ 		if (g_grp[i]) {
+diff --git a/server/test/testItemGroupType.cc b/server/test/testItemGroupType.cc
+index d82760b..96fae56 100644
+--- a/server/test/testItemGroupType.cc
++++ b/server/test/testItemGroupType.cc
+@@ -48,7 +48,7 @@ static ItemDataVector g_itemVec[NUM_ITEM_VEC_POOL];
+ static ItemDataVector &x_itemVec = g_itemVec[0];
+ static ItemDataVector &y_itemVec = g_itemVec[1];
+ 
+-void teardown()
++void cut_teardown()
+ {
+ 	for (int i = 0; i < NUM_ITEM_VEC_POOL; i++) {
+ 		if (!g_itemVec[i].empty()) {
+diff --git a/server/test/testItemPtr.cc b/server/test/testItemPtr.cc
+index 9c7875b..34f685a 100644
+--- a/server/test/testItemPtr.cc
++++ b/server/test/testItemPtr.cc
+@@ -46,7 +46,7 @@ static ItemData *g_item[NUM_ITEM_POOL];
+ static ItemData *&x_item = g_item[0];
+ static ItemData *&y_item = g_item[1];
+ 
+-void teardown(void)
++void cut_teardown(void)
+ {
+ 	for (int i = 0; i < NUM_ITEM_POOL; i++) {
+ 		if (g_item[i]) {
+diff --git a/server/test/testItemTable.cc b/server/test/testItemTable.cc
+index 78bb5a8..a4ea67a 100644
+--- a/server/test/testItemTable.cc
++++ b/server/test/testItemTable.cc
+@@ -170,7 +170,7 @@ static void _assertIndexMulti(void)
+ }
+ #define assertIndexMulti() cut_trace(_assertIndexMulti())
+ 
+-void teardown(void)
++void cut_teardown(void)
+ {
+ 	for (int i = 0; i < NUM_TABLE_POOL; i++) {
+ 		if (g_table[i]) {
+diff --git a/server/test/testMySQLWorkerZabbix.cc b/server/test/testMySQLWorkerZabbix.cc
+index f960630..473b79d 100644
+--- a/server/test/testMySQLWorkerZabbix.cc
++++ b/server/test/testMySQLWorkerZabbix.cc
+@@ -44,12 +44,12 @@ GError *g_error = NULL;
+ gboolean g_spawnRet;
+ gint     g_exitStatus;
+ 
+-void setup()
++void cut_setup()
+ {
+ 	cut_omit("This test will be recreated to execute without the running hatohol process.");
+ }
+ 
+-void teardown()
++void cut_teardown()
+ {
+ 	if (g_standardOutput) {
+ 		g_free(g_standardOutput);
+diff --git a/server/test/testSQLColumnParser.cc b/server/test/testSQLColumnParser.cc
+index 183c164..41d7ff2 100644
+--- a/server/test/testSQLColumnParser.cc
++++ b/server/test/testSQLColumnParser.cc
+@@ -128,7 +128,7 @@ void _assertSum(ParsableString &statement, const char *columnName)
+ }
+ #define assertSum(S,C) cut_trace(_assertSum(S,C))
+ 
+-void setup(void)
++void cut_setup(void)
+ {
+ 	hatoholInit();
+ }
+diff --git a/server/test/testSQLFromParser.cc b/server/test/testSQLFromParser.cc
+index a263706..02c3a35 100644
+--- a/server/test/testSQLFromParser.cc
++++ b/server/test/testSQLFromParser.cc
+@@ -120,7 +120,7 @@ void _assertTableList(const StringList &expectedNameList,
+ }
+ #define assertTableList(E,T) cut_trace(_assertTableList(E,T))
+ 
+-void setup(void)
++void cut_setup(void)
+ {
+ 	hatoholInit();
+ }
+diff --git a/server/test/testSQLProcessor.cc b/server/test/testSQLProcessor.cc
+index c35154e..2ce5f47 100644
+--- a/server/test/testSQLProcessor.cc
++++ b/server/test/testSQLProcessor.cc
+@@ -683,7 +683,7 @@ static void resetTestData(void)
+ 	resetTestDataZ();
+ }
+ 
+-void setup(void)
++void cut_setup(void)
+ {
+ 	hatoholInit();
+ 	resetTestData();
+diff --git a/server/test/testSQLProcessorInsert.cc b/server/test/testSQLProcessorInsert.cc
+index de2a747..443d1a6 100644
+--- a/server/test/testSQLProcessorInsert.cc
++++ b/server/test/testSQLProcessorInsert.cc
+@@ -104,7 +104,7 @@ void setupDummyMap(void)
+ 	dummyMap[dummyTableName] = NULL;
+ }
+ 
+-void setup(void)
++void cut_setup(void)
+ {
+ 	hatoholInit();
+ 	setupDummyMap();
+diff --git a/server/test/testSQLProcessorUpdate.cc b/server/test/testSQLProcessorUpdate.cc
+index 4e8d701..175b3bf 100644
+--- a/server/test/testSQLProcessorUpdate.cc
++++ b/server/test/testSQLProcessorUpdate.cc
+@@ -70,7 +70,7 @@ void setupDummyMap(void)
+ 	dummyMap[dummyTableName] = NULL;
+ }
+ 
+-void setup(void)
++void cut_setup(void)
+ {
+ 	hatoholInit();
+ 	setupDummyMap();
+diff --git a/server/test/testSQLWhereParser.cc b/server/test/testSQLWhereParser.cc
+index 42861d2..5d99aba 100644
+--- a/server/test/testSQLWhereParser.cc
++++ b/server/test/testSQLWhereParser.cc
+@@ -131,7 +131,7 @@ static void _assertPrimaryConditionColumnsEqual
+ #define assertPrimaryConditionColumnsEqual(CCI, LT, LC, RT, RC) \
+ cut_trace((_assertPrimaryConditionColumnsEqual(CCI, LT, LC, RT, RC)))
+ 
+-void setup(void)
++void cut_setup(void)
+ {
+ 	hatoholInit();
+ }
+diff --git a/server/test/testUnifiedDataStore.cc b/server/test/testUnifiedDataStore.cc
+index 2012e76..c992506 100644
+--- a/server/test/testUnifiedDataStore.cc
++++ b/server/test/testUnifiedDataStore.cc
+@@ -28,7 +28,7 @@
+ 
+ namespace testUnifiedDataStore {
+ 
+-void setup(void)
++void cut_setup(void)
+ {
+ 	const gchar *dbPath = cut_build_path(cut_get_test_directory(),
+ 					     "fixtures",
+diff --git a/server/test/testUtils.cc b/server/test/testUtils.cc
+index 0753675..0f14bed 100644
+--- a/server/test/testUtils.cc
++++ b/server/test/testUtils.cc
+@@ -43,7 +43,7 @@ static void _assertGetExtension(const string &path, const string &expected)
+ }
+ #define assertGetExtension(P, E) cut_trace(_assertGetExtension(P, E))
+ 
+-void setup(void)
++void cut_setup(void)
+ {
+ 	hatoholInit();
+ }

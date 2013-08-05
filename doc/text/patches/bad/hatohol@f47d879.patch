@@ -1,0 +1,48 @@
+コミットログの見た目だけ整えてもダメな例。
+いくつか問題がある。
+
+  * コミットログと実際の修正が異なっている
+    * 「function name」ではなく「variable name」
+  * 複数の変更が一度にされている
+  * 変更点が縦に並んでいるが、それぞれの変更が空行で区切られていないため見辛い
+
+hatohol@5ecee17がこれに対する良い例。
+
+commit f47d8797289e37ff62cbc9e79f9dc2c255095747
+Author: Noriki Nakamura <noriki.nakamura@miraclelinux.com>
+Date:   Thu Aug 1 17:55:13 2013 +0900
+
+    Change function name.
+    
+    sout->
+    stdOut
+    serr->
+    stdErr
+    err->
+    error
+    ret->
+    succeeded
+
+diff --git a/server/test/testMain.cc b/server/test/testMain.cc
+index 5bf40ba..3fdb68b 100644
+--- a/server/test/testMain.cc
++++ b/server/test/testMain.cc
+@@ -33,12 +33,12 @@ void teardown(void)
+ void test_daemonize(void)
+ {
+ 	const gchar *argv[] = {"/usr/local/sbin/hatohol", "--config-db-server", "localhost", NULL};
+-	gint sout, serr;
+-	GError *err;
+-	gboolean ret;
+-	ret = g_spawn_async_with_pipes(NULL, const_cast<gchar**>(argv), NULL,
+-			G_SPAWN_DO_NOT_REAP_CHILD, NULL, NULL, &pid, NULL, &sout, &serr, &err);
+-	cppcut_assert_equal(true, (bool)ret);
++	gint stdOut, stdErr;
++	GError *error;
++	gboolean succeeded;
++	succeeded = g_spawn_async_with_pipes(NULL, const_cast<gchar**>(argv), NULL,
++			G_SPAWN_DO_NOT_REAP_CHILD, NULL, NULL, &pid, NULL, &stdOut, &stdErr, &error);
++	cppcut_assert_equal(true, (bool)succeeded);
+ }
+ }
+ 
