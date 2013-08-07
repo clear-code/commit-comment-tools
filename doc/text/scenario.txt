@@ -50,7 +50,7 @@
 
 http://www.clear-code.com/services/commit-comment.html
 
-あ期待される効果のところまでを読む。
+期待される効果のところまでを読む。
 
 ** 「リーダブルコードの解説」を読む (10分)
 
