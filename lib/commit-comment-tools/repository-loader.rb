@@ -56,7 +56,7 @@ module CommitCommentTools
       puts @repository_name
       loop do
         n_commits = load_base_branch_commits
-        break if n_commits == 0
+        break if n_commits.zero?
       end
       @target_branches.each do |branch|
         load_branch_commits(branch.name)
