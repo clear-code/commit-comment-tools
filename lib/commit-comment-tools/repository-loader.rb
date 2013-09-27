@@ -54,7 +54,10 @@ module CommitCommentTools
 
     def load_commits
       puts @repository_name
-      load_base_branch_commits
+      loop do
+        n_commits = load_base_branch_commits
+        break if n_commits == 0
+      end
       @target_branches.each do |branch|
         load_branch_commits(branch.name)
       end
@@ -80,6 +83,7 @@ module CommitCommentTools
         end
       end
       puts "#{@base_branch_name}:#{n_records}/#{n_commits}, skip=#{skip}"
+      n_commits
     end
 
     def load_branch_commits(branch_name)
