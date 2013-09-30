@@ -49,6 +49,7 @@ Gem::Specification.new do |spec|
   spec.files += ["Rakefile", "Gemfile", "commit-comment-tools.gemspec"]
   spec.files += [".yardopts"]
   spec.files += Dir.glob("lib/**/*.rb")
+  spec.files += Dir.glob("templates/*.gp.erb")
   spec.files += Dir.glob("doc/text/*")
   spec.test_files = Dir.glob("test/**/*.rb")
   Dir.chdir("bin") do
