@@ -52,8 +52,8 @@ module CommitCommentTools
       CSV.generate do |csv|
         csv << ["TERM", "average(commit)", *@reply_from_patterns.keys.sort, "average(reply)"]
         count_map.each do |label, row_map|
-          term = @terms.detect do |term|
-            term.label == label
+          term = @terms.detect do |t|
+            t.label == label
           end
           row_map = row_map.dup
           n_reply_mails = row_map.delete("n_reply_mails")
