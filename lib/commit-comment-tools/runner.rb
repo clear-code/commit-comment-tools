@@ -48,6 +48,7 @@ Subcommands:
     analyze-reports  Analyze daily reports.
     fetch-mails      Fetch commit mails.
     count-mails      Count commit mails.
+    gnuplot-script   Generate script for Gnuplot.
       BANNER
 
       @parser.separator("")
@@ -64,6 +65,7 @@ Subcommands:
         "analyze-reports" => CommitCommentTools::Subcommands::AnalyzeReportsCommand.new,
         "fetch-mails"     => CommitCommentTools::Subcommands::FetchMailsCommand.new,
         "count-mails"     => CommitCommentTools::Subcommands::CountMailsCommand.new,
+        "gnuplot-script"  => CommitCommentTools::Subcommands::GnuplotScriptCommand.new,
       }
     end
 
