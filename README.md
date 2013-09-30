@@ -50,6 +50,7 @@ Subcommands:
     analyze-reports  Analyze daily reports.
     fetch-mails      Fetch commit mails.
     count-mails      Count commit mails.
+    gnuplot-script   Generate script for Gnuplot.
 
 Global Opions:
         --help                       Prints this message and quit.
@@ -162,6 +163,24 @@ Options:
     -t, --terms=TERM1,TERM2,TERM3,   Analyze commits in these terms.
         --reply-from-patterns=LABEL:PATTERN,...
                                      Reply from address patterns.
+    -h, --help                       Print this message and quit.
+````
+
+### gnuplot-script
+
+````
+cct gnuplot-script --help
+Usage: ./bin/cct [options]
+  e.g: ./bin/cct --input-file=xxx.csv --output-file=xxx.gp --template=pareto --output-image-filename=xxx.png
+
+Options:
+    -i, --input-filename=FILENAME    Input filename.
+    -o, --output-filename=FILENAME   Output filename.
+    -OIMAGE,                         Output image filename.
+        --output-image-filename
+    -T, --template=TEMPLATE          Template
+                                     available templates: [pareto, average]
+                                     [pareto]
     -h, --help                       Print this message and quit.
 ````
 
