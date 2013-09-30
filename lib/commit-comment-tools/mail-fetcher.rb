@@ -46,7 +46,6 @@ module CommitCommentTools
       imap.select(@options[:mailbox])
 
       threads = []
-      @outputdir
       @terms.each do |term|
         dir = File.join(@outputdir, term.dirname)
         FileUtils.mkdir_p(dir)
