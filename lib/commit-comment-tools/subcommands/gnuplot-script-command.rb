@@ -35,7 +35,7 @@ module CommitCommentTools
       def prepare
         @parser.banner = <<-BANNER
 Usage: #{$0} [options]
-  e.g: #{$0} --input-file=xxx.csv --output-file=xxx.png --template=pareto
+  e.g: #{$0} --input-file=xxx.csv --output-file=xxx.gp --template=pareto --output-image-filename=xxx.png
         BANNER
 
         @parser.separator("")
