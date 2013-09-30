@@ -15,14 +15,48 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+require "erb"
+
 module CommitCommentTools
   module Generator
     class GnuplotScript
       def initialize(options={})
+        @input_filename = options[:input_filename]
         @output_filename = options[:output_filename]
+        @output_image_filename = options[:output_image_filename]
+        @template = options[:template]
+        @template_path = template_path(@template)
       end
 
       def generate
+        prepare
+        File.open(@output_filename, "w") do |file|
+          file.puts ERB.new(File.read(@template_path), nil, "-").result(binding)
+        end
+      end
+
+      private
+
+      def template_path(template)
+        source_dir = Pathname(__FILE__).parent.parent.parent.parent.expand_path
+        source_dir + "templates" + "#{template}.gp.erb"
+      end
+
+      def prepare
+        case @template
+        when :pareto
+          first_line = File.readlines(@input_filename).first.chomp
+          @line_titles, @stacked_titles = first_line.split(",")[1..-1].partition do |element|
+            /stacked/ !~ element
+          end
+          @stacked_titles = @stacked_titles.map do |title|
+            title.gsub(/\(stacked\)/, "")
+          end
+        when :average
+          # Do nothing
+        else
+          raise "Must not happen. template:#{@template}"
+        end
       end
     end
   end
