@@ -1,0 +1,15 @@
+set terminal png
+set output "<%= @output_image_filename %>"
+
+set ylabel "commits/day"
+set yrange [0:50]
+set y2label "lines/commit"
+set y2range [0:200]
+set ytics nomirror
+set y2tics
+set xlabel "term"
+
+set datafile separator ","
+
+plot "<%= @input_filename %>" using 2:xtic(1) axes x1y1 with linespoints pointtype 7 linewidth 2 title "commits", \
+     "" using 3:xtic(1) axes x1y2 with linespoints pointtype 7 linewidth 2 title "lines"
