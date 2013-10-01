@@ -171,7 +171,7 @@ Options:
 ````
 cct gnuplot-script --help
 Usage: ./bin/cct [options]
-  e.g: ./bin/cct --input-file=xxx.csv --output-file=xxx.gp --template=pareto --output-image-filename=xxx.png
+  e.g: ./bin/cct gnuplot-script --input-file=xxx.csv --output-file=xxx.gp --template=pareto --output-image-filename=xxx.png
 
 Options:
     -i, --input-filename=FILENAME    Input filename.
