@@ -31,7 +31,9 @@ module CommitCommentTools
       def generate
         prepare
         File.open(@output_filename, "w") do |file|
-          file.puts ERB.new(File.read(@template_path), nil, "-").result(binding)
+          erb = ERB.new(File.read(@template_path), nil, "-")
+          erb.filename = File.basename(@template_path)
+          file.puts erb.result(binding)
         end
       end
 
