@@ -45,10 +45,7 @@ module CommitCommentTools
       def prepare
         case @template
         when :pareto
-          first_line = nil
-          File.open(@input_filename, "r") do |file|
-            first_line = file.gets.chomp
-          end
+          first_line = File.open(@input_filename, "r") {|file| file.gets.chomp }
           @line_titles, @stacked_titles = first_line.split(",")[1..-1].partition do |element|
             /stacked/ !~ element
           end
