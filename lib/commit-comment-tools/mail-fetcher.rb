@@ -68,7 +68,18 @@ module CommitCommentTools
     end
 
     def fetch_via_pop
-      raise "Not implemented!"
+      # TODO classify mails by terms
+      dir = @outputdir
+      FileUtils.mkdir_p(dir)
+      Dir.chdir(dir) do
+        Net::POP3.foreach(@options[:server], @options[:port],
+                          @options[:username], @options[:password]) do |m|
+          filename = "%s.eml" % Time.now.strftime("%s%N")
+          File.open(filename, "wb+") do |file|
+            m.pop(file)
+          end
+        end
+      end
     end
 
     private
